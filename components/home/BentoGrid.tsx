@@ -8,35 +8,43 @@ const items = [
     title: "Sensedia", 
     desc: "Global B2B Go-To-Market", 
     year: "2023", 
-    img: "/project1.png",
+    img: "/project1.png", // Lowercase 'p'
     pdf: "https://drive.google.com/file/d/172OdHNh8rkxhhOCjNBVqDhSP-NclsGgZ/view?usp=sharing" 
   },
   { 
     title: "MyBambu", 
     desc: "Fintech 0-1 Launch", 
     year: "2020", 
-    img: "/project2.png",
+    img: "/project2.png", // Lowercase 'p'
     pdf: "https://drive.google.com/file/d/1hTcMRLF_5N_nDTGEIVFf4oKSgRIJWSUV/view?usp=sharing"
   },
   { 
     title: "Miami Heat", 
     desc: "Heat VICE Integrated Campaign", 
     year: "2018", 
-    img: "/project3.webp",
+    img: "/project3.webp", // Lowercase 'p'
     pdf: "https://drive.google.com/file/d/1R_3AQ26Q84I05D9a-VD4Aqw_XWnaov3g/view?usp=sharing"
   },
   { 
     title: "GreenRoads", 
     desc: "Social Media Campaigns", 
     year: "2016", 
-    img: "/project4.webp",
+    img: "/project4.webp", // Lowercase 'p'
     pdf: "https://drive.google.com/file/d/16r6R8Mxw3bLBBQtWxw3RX7o6GwCH3mqO/view?usp=sharing"
   },
 ];
 
-// Reusable Tailwind classes for the shadow effect
+// Reusable Tailwind classes
 const SHADOW_CLASS = "shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_24px_40px_-6px_rgba(0,0,0,0.15)]";
 const HOVER_SHADOW_CLASS = "hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_30px_60px_-12px_rgba(0,0,0,0.25)]";
+
+// Common card class to ensure mobile height (h-96) and desktop height (md:h-full)
+const CARD_CLASS = `
+  group relative rounded-3xl overflow-hidden cursor-pointer block
+  h-96 md:h-full w-full
+  transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]
+  ${SHADOW_CLASS} ${HOVER_SHADOW_CLASS}
+`;
 
 export default function BentoGrid() {
   return (
@@ -56,9 +64,7 @@ export default function BentoGrid() {
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className={`group relative rounded-3xl overflow-hidden cursor-pointer block
-            ${SHADOW_CLASS} ${HOVER_SHADOW_CLASS}
-            flex-[2] hover:flex-[3] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]`}
+            className={`${CARD_CLASS} flex-[2] hover:flex-[3]`}
           >
             <div className="absolute inset-0">
                 <Image 
@@ -89,9 +95,7 @@ export default function BentoGrid() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className={`group relative rounded-3xl overflow-hidden cursor-pointer block
-            ${SHADOW_CLASS} ${HOVER_SHADOW_CLASS}
-            flex-[1] hover:flex-[3] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]`}
+            className={`${CARD_CLASS} flex-[1] hover:flex-[3]`}
           >
              <div className="absolute inset-0">
                 <Image 
@@ -126,9 +130,7 @@ export default function BentoGrid() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className={`group relative rounded-3xl overflow-hidden cursor-pointer block
-            ${SHADOW_CLASS} ${HOVER_SHADOW_CLASS}
-            flex-[1] hover:flex-[3] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]`}
+            className={`${CARD_CLASS} flex-[1] hover:flex-[3]`}
           >
              <div className="absolute inset-0">
                 <Image 
@@ -159,9 +161,7 @@ export default function BentoGrid() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className={`group relative rounded-3xl overflow-hidden cursor-pointer block
-            ${SHADOW_CLASS} ${HOVER_SHADOW_CLASS}
-            flex-[2] hover:flex-[3] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]`}
+            className={`${CARD_CLASS} flex-[2] hover:flex-[3]`}
           >
              <div className="absolute inset-0">
                 <Image 
