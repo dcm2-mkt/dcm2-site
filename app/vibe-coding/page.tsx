@@ -75,26 +75,30 @@ export default function VibeCoding() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1, duration: 0.5 }}
             viewport={{ once: true }}
-            // UPDATE: Added transform-gpu and switched to transition-transform
+            // UPDATE: Added 'md:' prefix to hover scale so it only happens on desktop
             className={`group relative h-96 md:h-[450px] rounded-3xl overflow-hidden cursor-pointer block 
             ${SHADOW_EFFECT} 
-            hover:scale-[1.02] transition-transform duration-500 transform-gpu`}
+            md:hover:scale-[1.02] transition-transform duration-500 transform-gpu`}
           >
-            {/* Background Image - MICRO BLUR (2px) */}
+            {/* Background Image */}
             <div className="absolute inset-0">
               <Image 
                 src={item.img} 
                 alt={item.title} 
                 fill 
-                // UPDATE: Added sizes prop and transform-gpu
                 sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover transition-transform duration-700 group-hover:scale-125 blur-[2px] scale-110 transform-gpu"
+                // UPDATE: 
+                // 1. Removed blur on mobile (md:blur-[2px])
+                // 2. Removed scale on mobile (md:scale-110)
+                // 3. Removed zoom on mobile (md:group-hover:scale-125)
+                className="object-cover transition-transform duration-700 md:blur-[2px] md:scale-110 md:group-hover:scale-125 transform-gpu"
               />
                <div className="absolute inset-0 bg-black/10" />
             </div>
 
             {/* Floating Info Card (Bottom) */}
-            <div className="absolute bottom-6 left-6 right-6 p-6 bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl transition-all duration-300 group-hover:translate-y-[-5px]">
+            {/* UPDATE: Solid white on mobile (bg-white), Glass on desktop (md:backdrop-blur-sm) */}
+            <div className="absolute bottom-6 left-6 right-6 p-6 bg-white md:bg-white/95 md:backdrop-blur-sm rounded-2xl shadow-xl transition-all duration-300 group-hover:translate-y-[-5px]">
               <div className="flex justify-between items-start mb-2">
                 <h3 className="text-2xl font-bold tracking-tight text-[#1d1d1f]">{item.title}</h3>
                 <ArrowUpRight className="w-5 h-5 text-gray-400 group-hover:text-black transition-colors" />

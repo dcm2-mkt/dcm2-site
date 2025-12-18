@@ -34,17 +34,13 @@ const items = [
   },
 ];
 
-// Reusable Tailwind classes
 const SHADOW_CLASS = "shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_24px_40px_-6px_rgba(0,0,0,0.15)]";
 const HOVER_SHADOW_CLASS = "hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_30px_60px_-12px_rgba(0,0,0,0.25)]";
 
-// Fixed: h-96 forces height on mobile. md:h-full lets it expand on desktop.
-// Added: transform-gpu to prevent flickering
 const CARD_CLASS = `
   group relative rounded-3xl overflow-hidden cursor-pointer block
   w-full h-96 md:h-full 
   transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]
-  transform-gpu
   ${SHADOW_CLASS} ${HOVER_SHADOW_CLASS}
 `;
 
@@ -73,12 +69,13 @@ export default function BentoGrid() {
                     src={items[0].img} 
                     alt={items[0].title} 
                     fill 
-                    // UPDATE: Added sizes and transform-gpu
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105 transform-gpu"
+                    // UPDATE: 'md:group-hover' ensures zoom only happens on desktop
+                    className="object-cover transition-transform duration-700 md:group-hover:scale-105"
                 />
             </div>
-            <div className="absolute bottom-6 left-6 right-6 p-6 bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl transition-all duration-300 group-hover:translate-y-[-5px]">
+            {/* UPDATE: Removed backdrop-blur-sm on mobile (heavy), added it back for desktop (md:) */}
+            <div className="absolute bottom-6 left-6 right-6 p-6 bg-white md:bg-white/95 md:backdrop-blur-sm rounded-2xl shadow-xl transition-all duration-300 group-hover:translate-y-[-5px]">
                 <div className="flex justify-between items-start mb-2">
                     <div>
                         <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-1">{items[0].year}</p>
@@ -106,12 +103,11 @@ export default function BentoGrid() {
                     src={items[1].img} 
                     alt={items[1].title} 
                     fill 
-                    // UPDATE: Added sizes and transform-gpu
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105 transform-gpu"
+                    className="object-cover transition-transform duration-700 md:group-hover:scale-105"
                 />
             </div>
-            <div className="absolute bottom-6 left-6 right-6 p-6 bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl transition-all duration-300 group-hover:translate-y-[-5px]">
+            <div className="absolute bottom-6 left-6 right-6 p-6 bg-white md:bg-white/95 md:backdrop-blur-sm rounded-2xl shadow-xl transition-all duration-300 group-hover:translate-y-[-5px]">
                 <div className="flex justify-between items-start mb-2">
                     <div>
                         <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-1">{items[1].year}</p>
@@ -143,12 +139,11 @@ export default function BentoGrid() {
                     src={items[2].img} 
                     alt={items[2].title} 
                     fill 
-                    // UPDATE: Added sizes and transform-gpu
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105 transform-gpu"
+                    className="object-cover transition-transform duration-700 md:group-hover:scale-105"
                 />
             </div>
-            <div className="absolute bottom-6 left-6 right-6 p-6 bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl transition-all duration-300 group-hover:translate-y-[-5px]">
+            <div className="absolute bottom-6 left-6 right-6 p-6 bg-white md:bg-white/95 md:backdrop-blur-sm rounded-2xl shadow-xl transition-all duration-300 group-hover:translate-y-[-5px]">
                 <div className="flex justify-between items-start mb-2">
                     <div>
                         <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-1">{items[2].year}</p>
@@ -176,12 +171,11 @@ export default function BentoGrid() {
                     src={items[3].img} 
                     alt={items[3].title} 
                     fill 
-                    // UPDATE: Added sizes and transform-gpu
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105 transform-gpu"
+                    className="object-cover transition-transform duration-700 md:group-hover:scale-105"
                 />
             </div>
-            <div className="absolute bottom-6 left-6 right-6 p-6 bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl transition-all duration-300 group-hover:translate-y-[-5px]">
+            <div className="absolute bottom-6 left-6 right-6 p-6 bg-white md:bg-white/95 md:backdrop-blur-sm rounded-2xl shadow-xl transition-all duration-300 group-hover:translate-y-[-5px]">
                 <div className="flex justify-between items-start mb-2">
                     <div>
                         <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-1">{items[3].year}</p>
