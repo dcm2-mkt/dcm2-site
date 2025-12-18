@@ -37,12 +37,10 @@ const items = [
 const SHADOW_CLASS = "shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_24px_40px_-6px_rgba(0,0,0,0.15)]";
 const HOVER_SHADOW_CLASS = "hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_30px_60px_-12px_rgba(0,0,0,0.25)]";
 
-// UPDATE 1: Added 'will-change-transform' and specific Safari hacks via style prop below
 const CARD_CLASS = `
   group relative rounded-3xl overflow-hidden cursor-pointer block
   w-full h-96 md:h-full 
-  transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]
-  transform-gpu will-change-transform
+  transition-all duration-500 ease-out
   ${SHADOW_CLASS} ${HOVER_SHADOW_CLASS}
 `;
 
@@ -61,19 +59,16 @@ export default function BentoGrid() {
             href={items[0].pdf}
             target="_blank"
             rel="noopener noreferrer"
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            // REMOVED: initial={{ opacity: 0 }} and whileInView
+            // This ensures the element is static and stable on mobile
             className={`${CARD_CLASS} md:flex-[2] md:hover:flex-[3]`}
-            // UPDATE 2: Force Safari/iOS to stabilize the layer
-            style={{ WebkitBackfaceVisibility: "hidden", WebkitTransform: "translate3d(0, 0, 0)" }}
+            style={{ isolation: 'isolate' }} // Fixes Safari clipping issues
           >
             <div className="absolute inset-0">
                 <Image 
                     src={items[0].img} 
                     alt={items[0].title} 
                     fill 
-                    // UPDATE 3: Added 'priority' so it doesn't lazy load (flash) on iPhone
                     priority={true}
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover transition-transform duration-700 md:group-hover:scale-105"
@@ -96,19 +91,15 @@ export default function BentoGrid() {
             href={items[1].pdf}
             target="_blank"
             rel="noopener noreferrer"
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
             className={`${CARD_CLASS} md:flex-[1] md:hover:flex-[3]`}
-            style={{ WebkitBackfaceVisibility: "hidden", WebkitTransform: "translate3d(0, 0, 0)" }}
+            style={{ isolation: 'isolate' }}
           >
              <div className="absolute inset-0">
                 <Image 
                     src={items[1].img} 
                     alt={items[1].title} 
                     fill 
-                    priority={true} // Priority added
+                    priority={true}
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover transition-transform duration-700 md:group-hover:scale-105"
                 />
@@ -134,19 +125,15 @@ export default function BentoGrid() {
             href={items[2].pdf}
             target="_blank"
             rel="noopener noreferrer"
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
             className={`${CARD_CLASS} md:flex-[1] md:hover:flex-[3]`}
-            style={{ WebkitBackfaceVisibility: "hidden", WebkitTransform: "translate3d(0, 0, 0)" }}
+            style={{ isolation: 'isolate' }}
           >
              <div className="absolute inset-0">
                 <Image 
                     src={items[2].img} 
                     alt={items[2].title} 
                     fill 
-                    priority={true} // Priority added
+                    priority={true}
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover transition-transform duration-700 md:group-hover:scale-105"
                 />
@@ -168,19 +155,15 @@ export default function BentoGrid() {
             href={items[3].pdf}
             target="_blank"
             rel="noopener noreferrer"
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
             className={`${CARD_CLASS} md:flex-[2] md:hover:flex-[3]`}
-            style={{ WebkitBackfaceVisibility: "hidden", WebkitTransform: "translate3d(0, 0, 0)" }}
+            style={{ isolation: 'isolate' }}
           >
              <div className="absolute inset-0">
                 <Image 
                     src={items[3].img} 
                     alt={items[3].title} 
                     fill 
-                    priority={true} // Priority added
+                    priority={true}
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover transition-transform duration-700 md:group-hover:scale-105"
                 />
