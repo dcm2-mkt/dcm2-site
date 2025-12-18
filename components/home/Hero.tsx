@@ -27,7 +27,7 @@ export default function Hero() {
         transition={{ delay: 0.3, duration: 0.8 }}
         className="text-xl md:text-2xl text-gray-500 max-w-2xl font-medium leading-relaxed mb-10"
       >
-        Go from Vision to Execution. Efficiently.
+        Translatte Vision into Reality.
       </motion.p>
 
       <motion.div
