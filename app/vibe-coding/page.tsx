@@ -33,7 +33,7 @@ const tools = [
   },
 ];
 
-// 1. Defined the high-end shadow style here
+// 1. High-end shadow style
 const SHADOW_EFFECT = "shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_24px_40px_-6px_rgba(0,0,0,0.15)] hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_30px_60px_-12px_rgba(0,0,0,0.25)]";
 
 export default function VibeCoding() {
@@ -75,8 +75,8 @@ export default function VibeCoding() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1, duration: 0.5 }}
             viewport={{ once: true }}
-            // 2. Applied SHADOW_EFFECT here (removed old shadow-sm and hover:shadow-2xl)
-            className={`group relative h-[400px] rounded-3xl overflow-hidden cursor-pointer block 
+            // UPDATE: Changed h-[400px] to h-96 (mobile) and md:h-[450px] (desktop)
+            className={`group relative h-96 md:h-[450px] rounded-3xl overflow-hidden cursor-pointer block 
             ${SHADOW_EFFECT} 
             hover:scale-[1.02] transition-all duration-500`}
           >
