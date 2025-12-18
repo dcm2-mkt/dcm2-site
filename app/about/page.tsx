@@ -3,7 +3,6 @@
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-// Added ArrowRight to imports
 import { ArrowLeft, ArrowUpRight, ArrowRight, Volume2, VolumeX } from "lucide-react";
 
 // 1. Defined the shadow style here for the white button
@@ -46,6 +45,8 @@ export default function AboutPage() {
               muted 
               playsInline 
               className="w-full h-full object-cover"
+              // Added click handler to video itself for easier mobile toggling
+              onClick={toggleSound}
             >
               <source src="/DCM-Intro.mp4" type="video/mp4" />
               Your browser does not support the video tag.
@@ -54,7 +55,8 @@ export default function AboutPage() {
             {/* Sound Toggle Button */}
             <button 
               onClick={toggleSound}
-              className="absolute bottom-6 right-6 p-3 rounded-full bg-black/50 backdrop-blur-md text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-black/70"
+              // UPDATE: opacity-100 (visible on mobile) -> md:opacity-0 (hidden on desktop initially) -> md:group-hover:opacity-100 (show on hover desktop)
+              className="absolute bottom-6 right-6 p-3 rounded-full bg-black/50 backdrop-blur-md text-white opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 hover:bg-black/70 cursor-pointer z-10"
               aria-label={isMuted ? "Unmute video" : "Mute video"}
             >
               {isMuted ? (

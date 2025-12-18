@@ -39,10 +39,12 @@ const SHADOW_CLASS = "shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_24px_40px_-6px_rg
 const HOVER_SHADOW_CLASS = "hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_30px_60px_-12px_rgba(0,0,0,0.25)]";
 
 // Fixed: h-96 forces height on mobile. md:h-full lets it expand on desktop.
+// Added: transform-gpu to prevent flickering
 const CARD_CLASS = `
   group relative rounded-3xl overflow-hidden cursor-pointer block
   w-full h-96 md:h-full 
   transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]
+  transform-gpu
   ${SHADOW_CLASS} ${HOVER_SHADOW_CLASS}
 `;
 
@@ -64,7 +66,6 @@ export default function BentoGrid() {
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            // Changed: Added 'md:' to flex properties so they don't crush mobile height
             className={`${CARD_CLASS} md:flex-[2] md:hover:flex-[3]`}
           >
             <div className="absolute inset-0">
@@ -72,7 +73,9 @@ export default function BentoGrid() {
                     src={items[0].img} 
                     alt={items[0].title} 
                     fill 
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    // UPDATE: Added sizes and transform-gpu
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105 transform-gpu"
                 />
             </div>
             <div className="absolute bottom-6 left-6 right-6 p-6 bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl transition-all duration-300 group-hover:translate-y-[-5px]">
@@ -96,7 +99,6 @@ export default function BentoGrid() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            // Changed: Added 'md:' to flex properties
             className={`${CARD_CLASS} md:flex-[1] md:hover:flex-[3]`}
           >
              <div className="absolute inset-0">
@@ -104,7 +106,9 @@ export default function BentoGrid() {
                     src={items[1].img} 
                     alt={items[1].title} 
                     fill 
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    // UPDATE: Added sizes and transform-gpu
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105 transform-gpu"
                 />
             </div>
             <div className="absolute bottom-6 left-6 right-6 p-6 bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl transition-all duration-300 group-hover:translate-y-[-5px]">
@@ -132,7 +136,6 @@ export default function BentoGrid() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            // Changed: Added 'md:' to flex properties
             className={`${CARD_CLASS} md:flex-[1] md:hover:flex-[3]`}
           >
              <div className="absolute inset-0">
@@ -140,7 +143,9 @@ export default function BentoGrid() {
                     src={items[2].img} 
                     alt={items[2].title} 
                     fill 
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    // UPDATE: Added sizes and transform-gpu
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105 transform-gpu"
                 />
             </div>
             <div className="absolute bottom-6 left-6 right-6 p-6 bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl transition-all duration-300 group-hover:translate-y-[-5px]">
@@ -164,7 +169,6 @@ export default function BentoGrid() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            // Changed: Added 'md:' to flex properties
             className={`${CARD_CLASS} md:flex-[2] md:hover:flex-[3]`}
           >
              <div className="absolute inset-0">
@@ -172,7 +176,9 @@ export default function BentoGrid() {
                     src={items[3].img} 
                     alt={items[3].title} 
                     fill 
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    // UPDATE: Added sizes and transform-gpu
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105 transform-gpu"
                 />
             </div>
             <div className="absolute bottom-6 left-6 right-6 p-6 bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl transition-all duration-300 group-hover:translate-y-[-5px]">

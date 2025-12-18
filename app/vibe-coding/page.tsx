@@ -75,10 +75,10 @@ export default function VibeCoding() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1, duration: 0.5 }}
             viewport={{ once: true }}
-            // UPDATE: Changed h-[400px] to h-96 (mobile) and md:h-[450px] (desktop)
+            // UPDATE: Added transform-gpu and switched to transition-transform
             className={`group relative h-96 md:h-[450px] rounded-3xl overflow-hidden cursor-pointer block 
             ${SHADOW_EFFECT} 
-            hover:scale-[1.02] transition-all duration-500`}
+            hover:scale-[1.02] transition-transform duration-500 transform-gpu`}
           >
             {/* Background Image - MICRO BLUR (2px) */}
             <div className="absolute inset-0">
@@ -86,7 +86,9 @@ export default function VibeCoding() {
                 src={item.img} 
                 alt={item.title} 
                 fill 
-                className="object-cover transition-transform duration-700 group-hover:scale-125 blur-[2px] scale-110"
+                // UPDATE: Added sizes prop and transform-gpu
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover transition-transform duration-700 group-hover:scale-125 blur-[2px] scale-110 transform-gpu"
               />
                <div className="absolute inset-0 bg-black/10" />
             </div>
