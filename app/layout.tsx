@@ -6,8 +6,8 @@ import Navbar from "@/components/layout/Navbar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Minimal Portfolio",
-  description: "Designed by You",
+  title: "DCM2 | Diogo C Marques",
+  description: "Growth Marketing",
 };
 
 export default function RootLayout({
