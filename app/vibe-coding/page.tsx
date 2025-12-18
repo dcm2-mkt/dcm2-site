@@ -33,7 +33,7 @@ const tools = [
   },
 ];
 
-// 1. High-end shadow style
+// High-end shadow style
 const SHADOW_EFFECT = "shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_24px_40px_-6px_rgba(0,0,0,0.15)] hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_30px_60px_-12px_rgba(0,0,0,0.25)]";
 
 export default function VibeCoding() {
@@ -71,14 +71,15 @@ export default function VibeCoding() {
             href={item.link}
             target="_blank"
             rel="noopener noreferrer"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            // UPDATE: Removed slide-in (y:20), used Fade Only for stability
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             transition={{ delay: i * 0.1, duration: 0.5 }}
             viewport={{ once: true }}
-            // UPDATE: Added 'md:' prefix to hover scale so it only happens on desktop
-            className={`group relative h-96 md:h-[450px] rounded-3xl overflow-hidden cursor-pointer block 
+            // UPDATE: Height is now md:h-[500px] to match Bento Grid
+            className={`group relative h-96 md:h-[500px] rounded-3xl overflow-hidden cursor-pointer block 
             ${SHADOW_EFFECT} 
-            md:hover:scale-[1.02] transition-transform duration-500 transform-gpu`}
+            transform-gpu will-change-transform`}
           >
             {/* Background Image */}
             <div className="absolute inset-0">
@@ -86,18 +87,16 @@ export default function VibeCoding() {
                 src={item.img} 
                 alt={item.title} 
                 fill 
+                priority={i < 2} // Load first 2 images instantly
                 sizes="(max-width: 768px) 100vw, 50vw"
-                // UPDATE: 
-                // 1. Removed blur on mobile (md:blur-[2px])
-                // 2. Removed scale on mobile (md:scale-110)
-                // 3. Removed zoom on mobile (md:group-hover:scale-125)
-                className="object-cover transition-transform duration-700 md:blur-[2px] md:scale-110 md:group-hover:scale-125 transform-gpu"
+                // UPDATE: Removed blur-[2px]. Removed mobile scale. 
+                // Only gentle zoom on desktop hover (md:group-hover:scale-105).
+                className="object-cover transition-transform duration-700 md:group-hover:scale-105"
               />
-               <div className="absolute inset-0 bg-black/10" />
+              {/* UPDATE: Removed the dark bg-black/10 overlay entirely */}
             </div>
 
-            {/* Floating Info Card (Bottom) */}
-            {/* UPDATE: Solid white on mobile (bg-white), Glass on desktop (md:backdrop-blur-sm) */}
+            {/* Floating Info Card */}
             <div className="absolute bottom-6 left-6 right-6 p-6 bg-white md:bg-white/95 md:backdrop-blur-sm rounded-2xl shadow-xl transition-all duration-300 group-hover:translate-y-[-5px]">
               <div className="flex justify-between items-start mb-2">
                 <h3 className="text-2xl font-bold tracking-tight text-[#1d1d1f]">{item.title}</h3>
