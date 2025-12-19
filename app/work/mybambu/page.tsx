@@ -29,7 +29,8 @@ export default function CaseStudy() {
         >
           <div className="flex items-center gap-3 mb-6">
             <div className="h-3 w-3 rounded-full bg-[#00C853]" /> {/* MyBambu Green */}
-            <p className="text-sm font-bold uppercase tracking-widest text-gray-500">Fintech 0-1 Launch</p>
+            {/* UPDATE: Changed Title Text */}
+            <p className="text-sm font-bold uppercase tracking-widest text-gray-500">The Sprint: Fintech 0→1 Launch</p>
           </div>
           
           <h1 className="text-5xl md:text-7xl font-semibold tracking-tighter text-[#1d1d1f] mb-6">
@@ -50,8 +51,9 @@ export default function CaseStudy() {
           transition={{ delay: 0.2, duration: 0.5 }}
           className="relative aspect-video w-full rounded-3xl overflow-hidden shadow-2xl"
         >
+             {/* UPDATE: Changed Image Source to new file */}
              <Image 
-                src="/project2.png" 
+                src="/mybambu-hero.png" 
                 alt="MyBambu Hero" 
                 fill 
                 className="object-cover"
@@ -69,7 +71,9 @@ export default function CaseStudy() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 <div className="text-lg text-gray-600 leading-relaxed space-y-6">
                     <p>
-                        How do you compete with Chime and Revolut? <strong>You don't. You out-niche them.</strong>
+                        How do you compete with Chime and Revolut? 
+                        <br />
+                        <strong className="block text-[#1d1d1f] mt-2 text-xl">You don&apos;t. You out-niche them.</strong>
                     </p>
                     <p>
                         With millions of unbanked individuals underserved by traditional banking, MyBambu needed to bridge the gap between "accessible" and "trustworthy." Our goal was to bypass the general market noise and speak directly to a community that needed a financial home, not just another app.
@@ -141,7 +145,7 @@ export default function CaseStudy() {
                 <Target className="w-6 h-6 text-[#00C853]" />
             </div>
             <h3 className="text-2xl font-bold text-[#1d1d1f] mb-2">Go-To-Market</h3>
-            <p className="text-sm font-bold uppercase tracking-widest text-gray-400 mb-6">We didn't just build ads, we built value.</p>
+            <p className="text-sm font-bold uppercase tracking-widest text-gray-400 mb-6">We didn&apos;t just build ads, we built value.</p>
             <p className="text-gray-600 leading-relaxed">
                 Using data-driven analytics, we identified the specific financial friction points of our audience. We crafted a comprehensive user journey that felt familiar and safe, ensuring every touchpoint was meticulously timed and culturally relevant.
             </p>
