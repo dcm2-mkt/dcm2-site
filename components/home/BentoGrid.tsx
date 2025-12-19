@@ -9,7 +9,6 @@ const items = [
     desc: "Global B2B Go-To-Market", 
     year: "2023", 
     img: "/project1.png",
-    // CHANGE THIS:
     pdf: "/work/sensedia" 
   },
   { 
@@ -17,7 +16,6 @@ const items = [
     desc: "Fintech 0-1 Launch", 
     year: "2020", 
     img: "/project2.png",
-    // CHANGE THIS:
     pdf: "/work/mybambu"
   },
   { 
@@ -25,7 +23,6 @@ const items = [
     desc: "Heat VICE Integrated Campaign", 
     year: "2018", 
     img: "/project3.webp",
-    // CHANGE THIS:
     pdf: "/work/miami-heat"
   },
   { 
@@ -33,7 +30,6 @@ const items = [
     desc: "Social Media Campaigns", 
     year: "2016", 
     img: "/project4.webp",
-    // CHANGE THIS:
     pdf: "/work/greenroads"
   },
 ];
@@ -61,12 +57,9 @@ export default function BentoGrid() {
           {/* Item 1: Sensedia */}
           <motion.a
             href={items[0].pdf}
-            target="_blank"
-            rel="noopener noreferrer"
-            // REMOVED: initial={{ opacity: 0 }} and whileInView
-            // This ensures the element is static and stable on mobile
+            // REMOVED target="_blank" so it opens in same tab
             className={`${CARD_CLASS} md:flex-[2] md:hover:flex-[3]`}
-            style={{ isolation: 'isolate' }} // Fixes Safari clipping issues
+            style={{ isolation: 'isolate' }} 
           >
             <div className="absolute inset-0">
                 <Image 
@@ -93,8 +86,7 @@ export default function BentoGrid() {
           {/* Item 2: MyBambu */}
           <motion.a
             href={items[1].pdf}
-            target="_blank"
-            rel="noopener noreferrer"
+            // REMOVED target="_blank"
             className={`${CARD_CLASS} md:flex-[1] md:hover:flex-[3]`}
             style={{ isolation: 'isolate' }}
           >
@@ -127,8 +119,7 @@ export default function BentoGrid() {
           {/* Item 3: Miami Heat */}
           <motion.a
             href={items[2].pdf}
-            target="_blank"
-            rel="noopener noreferrer"
+            // REMOVED target="_blank"
             className={`${CARD_CLASS} md:flex-[1] md:hover:flex-[3]`}
             style={{ isolation: 'isolate' }}
           >
@@ -157,8 +148,7 @@ export default function BentoGrid() {
           {/* Item 4: GreenRoads */}
           <motion.a
             href={items[3].pdf}
-            target="_blank"
-            rel="noopener noreferrer"
+            // REMOVED target="_blank"
             className={`${CARD_CLASS} md:flex-[2] md:hover:flex-[3]`}
             style={{ isolation: 'isolate' }}
           >
