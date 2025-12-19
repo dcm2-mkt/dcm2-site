@@ -66,7 +66,7 @@ export default function CaseStudy() {
 
         {/* 1. THE CHALLENGE */}
         <div className="md:col-span-12 bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-gray-100">
-            <h3 className="text-3xl font-bold text-[#1d1d1f] mb-6">The Challenge: Cutting through the Noise</h3>
+            <h3 className="text-3xl font-bold text-[#1d1d1f] mb-6">Cutting through the Noise</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
                 <div className="space-y-6">
                     <div>
