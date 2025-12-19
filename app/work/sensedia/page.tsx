@@ -50,8 +50,9 @@ export default function CaseStudy() {
           transition={{ delay: 0.2, duration: 0.5 }}
           className="relative aspect-video w-full rounded-3xl overflow-hidden shadow-2xl"
         >
+             {/* UPDATE: Pointing to specific Sensedia Hero Image */}
              <Image 
-                src="/project1.png" 
+                src="/sensedia-hero.png" 
                 alt="Sensedia Hero" 
                 fill 
                 className="object-cover"
@@ -197,7 +198,7 @@ export default function CaseStudy() {
                         To penetrate complex financial institutions, we needed to win on two fronts. We crafted specific enterprise playbooks that targeted the C-Suite (Top-Down) with narratives around ROI and digital agility, while simultaneously arming DevOps teams (Bottom-Up) with technical proof points, demos, and fully supported pilots.
                     </p>
                     
-                    {/* UPDATED QUOTE SECTION */}
+                    {/* QUOTE SECTION */}
                     <div className="p-6 bg-white/10 rounded-xl border-l-4 border-[#6D28D9]">
                         <p className="text-white font-medium italic text-lg mb-4">
                             &quot;By aligning these two drivers, we turned technical gatekeepers into internal champions and executives into trusted partners and confident buyers.&quot;
