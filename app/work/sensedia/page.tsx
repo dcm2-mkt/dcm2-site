@@ -100,14 +100,14 @@ export default function CaseStudy() {
             <div className="mb-6 bg-purple-50 w-12 h-12 rounded-2xl flex items-center justify-center">
                 <Target className="w-6 h-6 text-[#6D28D9]" />
             </div>
-            <h3 className="text-2xl font-bold text-[#1d1d1f] mb-4">1. AI-Driven ABM</h3>
+            <h3 className="text-2xl font-bold text-[#1d1d1f] mb-4">AI-Driven ABM</h3>
             <p className="text-gray-600 mb-6 leading-relaxed">
-                We combined Ideal Customer Profiles (ICPs) with real-time intent signals to filter out noise and focus purely on high-intent buyers.
+                We combined Ideal Customer Profiles (ICPs) with real-time intent signals to identify high-value accounts.
             </p>
             <ul className="space-y-3">
                 <li className="flex items-start gap-3 text-sm text-gray-500 font-medium">
                     <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0" />
-                    <span>Dynamic, personalized ABM campaigns.</span>
+                    <span>Filtered out noise to focus on high-intent buyers.</span>
                 </li>
                 <li className="flex items-start gap-3 text-sm text-gray-500 font-medium">
                     <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0" />
@@ -121,18 +121,18 @@ export default function CaseStudy() {
              <div className="mb-6 bg-orange-50 w-12 h-12 rounded-2xl flex items-center justify-center">
                 <Users className="w-6 h-6 text-orange-500" />
             </div>
-            <h3 className="text-2xl font-bold text-[#1d1d1f] mb-4">2. Partner-Led Growth</h3>
+            <h3 className="text-2xl font-bold text-[#1d1d1f] mb-4">Partner-Led Growth</h3>
             <p className="text-gray-600 mb-6 leading-relaxed">
-                We operationalized a co-sell strategy with giants like AWS and Oracle, creating vertical-specific value propositions.
+                We operationalized a co-sell strategy with giants like AWS and Oracle.
             </p>
             <ul className="space-y-3">
                 <li className="flex items-start gap-3 text-sm text-gray-500 font-medium">
                     <CheckCircle2 className="w-5 h-5 text-orange-500 shrink-0" />
-                    <span>Optimized MDF for joint marketing.</span>
+                    <span>Created vertical-specific value props.</span>
                 </li>
                 <li className="flex items-start gap-3 text-sm text-gray-500 font-medium">
                     <CheckCircle2 className="w-5 h-5 text-orange-500 shrink-0" />
-                    <span>Penetrated enterprise accounts with trust.</span>
+                    <span>Optimized MDF to fuel joint marketing opportunities.</span>
                 </li>
             </ul>
         </div>
@@ -146,29 +146,32 @@ export default function CaseStudy() {
                 <div>
                     <div className="flex items-center gap-3 mb-4 text-[#6D28D9]">
                         <Zap className="w-5 h-5" />
-                        <span className="font-bold tracking-widest uppercase text-sm">The Secret Sauce</span>
+                        <span className="font-bold tracking-widest uppercase text-sm">Global Orchestration</span>
                     </div>
-                    <h3 className="text-3xl md:text-4xl font-bold mb-6">Dual-Driver Approach</h3>
+                    <h3 className="text-3xl md:text-4xl font-bold mb-6">Authority & Influence</h3>
                     <p className="text-gray-400 text-lg leading-relaxed mb-6">
-                        To win in complex financial markets, we attacked on two fronts simultaneously. 
-                        We turned technical gatekeepers into internal champions and executives into trusted partners.
+                        We established a global content engine designed to elevate brand authority across regions. 
+                        By targeting the C-Suite with high-value insights, we warmed up decision-makers before Sales ever made a call.
                     </p>
                 </div>
                 <div className="bg-white/10 rounded-3xl p-8 backdrop-blur-md border border-white/10">
+                    <div className="mb-4">
+                        <p className="text-sm font-bold uppercase tracking-widest text-gray-400">Dual-Driver Approach</p>
+                    </div>
                     <div className="space-y-6">
                         <div className="flex gap-4 items-start">
                             <div className="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center font-bold shrink-0">1</div>
                             <div>
-                                <p className="font-bold text-white text-lg">Top-Down (C-Suite)</p>
-                                <p className="text-gray-400 leading-relaxed">Targeted with narratives around ROI, Market Share, and Digital Agility.</p>
+                                <p className="font-bold text-white text-lg">Top-Down</p>
+                                <p className="text-gray-400 leading-relaxed">Targeting C-Suite with ROI & Agility narratives.</p>
                             </div>
                         </div>
                         <div className="w-full h-[1px] bg-white/10" />
                         <div className="flex gap-4 items-start">
                              <div className="w-8 h-8 rounded-full bg-[#6D28D9] text-white flex items-center justify-center font-bold shrink-0">2</div>
                             <div>
-                                <p className="font-bold text-white text-lg">Bottom-Up (DevOps)</p>
-                                <p className="text-gray-400 leading-relaxed">Armed with technical proof points, demos, and fully supported pilots.</p>
+                                <p className="font-bold text-white text-lg">Bottom-Up</p>
+                                <p className="text-gray-400 leading-relaxed">Arming DevOps with technical proof points & pilots.</p>
                             </div>
                         </div>
                     </div>
