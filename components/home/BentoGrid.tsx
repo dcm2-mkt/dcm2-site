@@ -9,28 +9,32 @@ const items = [
     desc: "Global B2B Go-To-Market", 
     year: "2023", 
     img: "/project1.png",
-    pdf: "https://drive.google.com/file/d/172OdHNh8rkxhhOCjNBVqDhSP-NclsGgZ/view?usp=sharing" 
+    // CHANGE THIS:
+    pdf: "/work/sensedia" 
   },
   { 
     title: "MyBambu", 
     desc: "Fintech 0-1 Launch", 
     year: "2020", 
     img: "/project2.png",
-    pdf: "https://drive.google.com/file/d/1hTcMRLF_5N_nDTGEIVFf4oKSgRIJWSUV/view?usp=sharing"
+    // CHANGE THIS:
+    pdf: "/work/mybambu"
   },
   { 
     title: "Miami Heat", 
     desc: "Heat VICE Integrated Campaign", 
     year: "2018", 
     img: "/project3.webp",
-    pdf: "https://drive.google.com/file/d/1R_3AQ26Q84I05D9a-VD4Aqw_XWnaov3g/view?usp=sharing"
+    // CHANGE THIS:
+    pdf: "/work/miami-heat"
   },
   { 
     title: "GreenRoads", 
     desc: "Social Media Campaigns", 
     year: "2016", 
     img: "/project4.webp",
-    pdf: "https://drive.google.com/file/d/16r6R8Mxw3bLBBQtWxw3RX7o6GwCH3mqO/view?usp=sharing"
+    // CHANGE THIS:
+    pdf: "/work/greenroads"
   },
 ];
 
