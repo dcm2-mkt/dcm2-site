@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowUpRight, CheckCircle2, TrendingUp, Users, Globe } from "lucide-react";
+import { ArrowLeft, CheckCircle2, TrendingUp, Globe, Users, Target, Zap } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,7 @@ export default function CaseStudy() {
           transition={{ duration: 0.5 }}
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="h-3 w-3 rounded-full bg-[#6D28D9]" /> {/* Sensedia Purple Dot */}
+            <div className="h-3 w-3 rounded-full bg-[#6D28D9]" /> {/* Sensedia Purple Brand Color */}
             <p className="text-sm font-bold uppercase tracking-widest text-gray-500">Global GTM Strategy</p>
           </div>
           
@@ -36,10 +36,10 @@ export default function CaseStudy() {
             Sensedia.
           </h1>
           <h2 className="text-2xl md:text-3xl font-medium text-gray-400 mb-8 leading-tight">
-             [cite_start]Shaping the Future of AI Adoption in Regulated Industries[cite: 5].
+             Shaping the Future of AI Adoption in Regulated Industries.
           </h2>
           <p className="text-lg text-gray-600 leading-relaxed max-w-lg">
-            [cite_start]We helped Sensedia penetrate the C-Suite in complex, regulated markets by proving that API-first strategies are the bridge between legacy systems and future agility[cite: 9].
+            We helped Sensedia penetrate the C-Suite in complex, regulated markets by proving that API-first strategies are the bridge between legacy systems and future agility.
           </p>
         </motion.div>
 
@@ -55,6 +55,7 @@ export default function CaseStudy() {
                 alt="Sensedia Hero" 
                 fill 
                 className="object-cover"
+                priority
              />
         </motion.div>
       </div>
@@ -63,32 +64,32 @@ export default function CaseStudy() {
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-6">
 
         {/* 1. THE CHALLENGE (Wide Tile) */}
-        <div className="md:col-span-8 bg-white rounded-3xl p-8 md:p-12 shadow-sm">
+        <div className="md:col-span-8 bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-gray-100">
             <h3 className="text-2xl font-bold text-[#1d1d1f] mb-4 flex items-center gap-3">
                 <Globe className="w-6 h-6 text-[#6D28D9]" />
-                [cite_start]The Challenge: Breaking the Legacy [cite: 6]
+                The Challenge: Breaking the Legacy
             </h3>
             <p className="text-lg text-gray-600 leading-relaxed">
-                [cite_start]Legacy institutions are racing to adopt AI, but rigid infrastructure holds them back[cite: 7]. 
-                [cite_start]Sensedia faced a critical hurdle: shifting perception from a technical vendor to a strategic enabler[cite: 8].
+                Legacy institutions are racing to adopt AI, but rigid infrastructure holds them back. 
+                Sensedia faced a critical hurdle: shifting perception from a technical vendor to a strategic enabler.
                 We needed to move beyond the "IT Crowd" and speak directly to the C-Suite about ROI and Agility.
             </p>
         </div>
 
-        {/* 2. STATS (Tall Tile) */}
-        <div className="md:col-span-4 bg-[#6D28D9] rounded-3xl p-8 md:p-12 text-white flex flex-col justify-center shadow-lg">
-            <TrendingUp className="w-10 h-10 mb-6 text-white/80" />
-            <div className="space-y-8">
+        {/* 2. STATS (Tall Tile - Purple Brand Color) */}
+        <div className="md:col-span-4 bg-[#6D28D9] rounded-3xl p-8 md:p-12 text-white flex flex-col justify-center shadow-xl">
+            <TrendingUp className="w-10 h-10 mb-8 text-white/80" />
+            <div className="space-y-10">
                 <div>
-                    <h4 className="text-5xl font-bold mb-1">142%</h4>
+                    <h4 className="text-6xl font-bold mb-2 tracking-tight">142%</h4>
                     <p className="text-sm font-medium text-white/80 uppercase tracking-wide">Pipeline Growth</p>
                 </div>
                 <div>
-                    <h4 className="text-5xl font-bold mb-1">$4M</h4>
+                    <h4 className="text-6xl font-bold mb-2 tracking-tight">$4M</h4>
                     <p className="text-sm font-medium text-white/80 uppercase tracking-wide">New ARR</p>
                 </div>
                 <div>
-                    <h4 className="text-5xl font-bold mb-1">6 Mo</h4>
+                    <h4 className="text-6xl font-bold mb-2 tracking-tight">6 Mo</h4>
                     <p className="text-sm font-medium text-white/80 uppercase tracking-wide">ROI Period</p>
                 </div>
             </div>
@@ -96,68 +97,78 @@ export default function CaseStudy() {
 
         {/* 3. STRATEGY: AI ABM (Medium Tile) */}
         <div className="md:col-span-6 bg-white rounded-3xl p-8 md:p-12 shadow-sm border-t-4 border-[#6D28D9]">
-            <h3 className="text-xl font-bold text-[#1d1d1f] mb-4">AI-Driven ABM</h3>
-            <p className="text-gray-600 mb-6">
-                [cite_start]We combined Ideal Customer Profiles (ICPs) with real-time intent signals to identify high-value accounts[cite: 19].
+            <div className="mb-6 bg-purple-50 w-12 h-12 rounded-2xl flex items-center justify-center">
+                <Target className="w-6 h-6 text-[#6D28D9]" />
+            </div>
+            <h3 className="text-2xl font-bold text-[#1d1d1f] mb-4">1. AI-Driven ABM</h3>
+            <p className="text-gray-600 mb-6 leading-relaxed">
+                We combined Ideal Customer Profiles (ICPs) with real-time intent signals to filter out noise and focus purely on high-intent buyers.
             </p>
             <ul className="space-y-3">
-                <li className="flex items-start gap-3 text-sm text-gray-500">
+                <li className="flex items-start gap-3 text-sm text-gray-500 font-medium">
                     <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0" />
-                    [cite_start]<span>Filtered out noise to focus on high-intent buyers[cite: 20].</span>
+                    <span>Dynamic, personalized ABM campaigns.</span>
                 </li>
-                <li className="flex items-start gap-3 text-sm text-gray-500">
+                <li className="flex items-start gap-3 text-sm text-gray-500 font-medium">
                     <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0" />
-                    [cite_start]<span>Accelerated MQL to SQL conversion[cite: 25].</span>
+                    <span>Accelerated MQL to SQL conversion.</span>
                 </li>
             </ul>
         </div>
 
         {/* 4. STRATEGY: PARTNER GROWTH (Medium Tile) */}
         <div className="md:col-span-6 bg-white rounded-3xl p-8 md:p-12 shadow-sm border-t-4 border-orange-500">
-            <h3 className="text-xl font-bold text-[#1d1d1f] mb-4">Partner-Led Growth</h3>
-            <p className="text-gray-600 mb-6">
-                [cite_start]We operationalized a co-sell strategy with giants like AWS and Oracle[cite: 34].
+             <div className="mb-6 bg-orange-50 w-12 h-12 rounded-2xl flex items-center justify-center">
+                <Users className="w-6 h-6 text-orange-500" />
+            </div>
+            <h3 className="text-2xl font-bold text-[#1d1d1f] mb-4">2. Partner-Led Growth</h3>
+            <p className="text-gray-600 mb-6 leading-relaxed">
+                We operationalized a co-sell strategy with giants like AWS and Oracle, creating vertical-specific value propositions.
             </p>
             <ul className="space-y-3">
-                <li className="flex items-start gap-3 text-sm text-gray-500">
+                <li className="flex items-start gap-3 text-sm text-gray-500 font-medium">
                     <CheckCircle2 className="w-5 h-5 text-orange-500 shrink-0" />
-                    [cite_start]<span>Created vertical-specific value props[cite: 31].</span>
+                    <span>Optimized MDF for joint marketing.</span>
                 </li>
-                <li className="flex items-start gap-3 text-sm text-gray-500">
+                <li className="flex items-start gap-3 text-sm text-gray-500 font-medium">
                     <CheckCircle2 className="w-5 h-5 text-orange-500 shrink-0" />
-                    [cite_start]<span>Optimized MDF to fuel joint marketing opportunities[cite: 33].</span>
+                    <span>Penetrated enterprise accounts with trust.</span>
                 </li>
             </ul>
         </div>
 
-        {/* 5. STRATEGY: GLOBAL ORCHESTRATION (Wide Tile) */}
-        <div className="md:col-span-12 bg-[#1d1d1f] rounded-3xl p-8 md:p-12 text-white shadow-xl relative overflow-hidden">
+        {/* 5. STRATEGY: DUAL DRIVER (Wide Tile - Dark Mode) */}
+        <div className="md:col-span-12 bg-[#1d1d1f] rounded-3xl p-8 md:p-12 text-white shadow-2xl relative overflow-hidden">
              {/* Background Decoration */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-gray-800 rounded-full blur-3xl opacity-20 -mr-16 -mt-16 pointer-events-none"></div>
+            <div className="absolute top-0 right-0 w-96 h-96 bg-[#6D28D9] rounded-full blur-[128px] opacity-20 -mr-20 -mt-20 pointer-events-none"></div>
 
             <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 <div>
-                    <h3 className="text-3xl font-bold mb-4">Global Orchestration & Authority</h3>
+                    <div className="flex items-center gap-3 mb-4 text-[#6D28D9]">
+                        <Zap className="w-5 h-5" />
+                        <span className="font-bold tracking-widest uppercase text-sm">The Secret Sauce</span>
+                    </div>
+                    <h3 className="text-3xl md:text-4xl font-bold mb-6">Dual-Driver Approach</h3>
                     <p className="text-gray-400 text-lg leading-relaxed mb-6">
-                        [cite_start]We established a global content engine designed to elevate brand authority across regions[cite: 38]. 
-                        [cite_start]By targeting the C-Suite with high-value insights, we warmed up decision-makers before Sales ever made a call[cite: 40].
+                        To win in complex financial markets, we attacked on two fronts simultaneously. 
+                        We turned technical gatekeepers into internal champions and executives into trusted partners.
                     </p>
                 </div>
-                <div className="bg-white/10 rounded-2xl p-6 backdrop-blur-sm">
-                    <h4 className="text-sm font-bold uppercase tracking-widest text-gray-400 mb-4">Dual-Driver Approach</h4>
-                    <div className="space-y-4">
-                        <div className="flex gap-4">
-                            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-bold text-white">1</div>
+                <div className="bg-white/10 rounded-3xl p-8 backdrop-blur-md border border-white/10">
+                    <div className="space-y-6">
+                        <div className="flex gap-4 items-start">
+                            <div className="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center font-bold shrink-0">1</div>
                             <div>
-                                <p className="font-bold text-white">Top-Down</p>
-                                [cite_start]<p className="text-sm text-gray-400">Targeting C-Suite with ROI & Agility narratives[cite: 43].</p>
+                                <p className="font-bold text-white text-lg">Top-Down (C-Suite)</p>
+                                <p className="text-gray-400 leading-relaxed">Targeted with narratives around ROI, Market Share, and Digital Agility.</p>
                             </div>
                         </div>
-                        <div className="flex gap-4">
-                             <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-bold text-white">2</div>
+                        <div className="w-full h-[1px] bg-white/10" />
+                        <div className="flex gap-4 items-start">
+                             <div className="w-8 h-8 rounded-full bg-[#6D28D9] text-white flex items-center justify-center font-bold shrink-0">2</div>
                             <div>
-                                <p className="font-bold text-white">Bottom-Up</p>
-                                [cite_start]<p className="text-sm text-gray-400">Arming DevOps with technical proof points & pilots[cite: 43].</p>
+                                <p className="font-bold text-white text-lg">Bottom-Up (DevOps)</p>
+                                <p className="text-gray-400 leading-relaxed">Armed with technical proof points, demos, and fully supported pilots.</p>
                             </div>
                         </div>
                     </div>
