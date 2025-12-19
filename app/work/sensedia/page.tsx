@@ -75,7 +75,6 @@ export default function CaseStudy() {
                         Sensedia faced a critical hurdle: shifting perception from a technical vendor to a strategic enabler. To succeed, we needed to penetrate the C-suite in complex, regulated industries, proving that our forward-thinking API-first strategies were the right way to bridge the gap between old systems and future agility.
                     </p>
                 </div>
-                 {/* Visual decoration representing the "API Economy" graphic from your screenshot */}
                 <div className="bg-[#F5F5F7] rounded-2xl p-8 flex items-center justify-center">
                     <div className="text-center space-y-4">
                         <div className="w-16 h-16 bg-[#6D28D9] rounded-full mx-auto flex items-center justify-center">
@@ -146,7 +145,7 @@ export default function CaseStudy() {
                         <h4 className="text-xl font-bold text-[#1d1d1f]">Joint Value Propositions</h4>
                     </div>
                     <p className="text-gray-600 leading-relaxed">
-                        We moved beyond generic "better together" messaging. We crafted specific, vertical-based value propositions that attacked deep niches with complementary technical offers.
+                        We moved beyond generic &quot;better together&quot; messaging. We crafted specific, vertical-based value propositions that attacked deep niches with complementary technical offers.
                     </p>
                 </div>
 
@@ -198,10 +197,16 @@ export default function CaseStudy() {
                         To penetrate complex financial institutions, we needed to win on two fronts. We crafted specific enterprise playbooks that targeted the C-Suite (Top-Down) with narratives around ROI and digital agility, while simultaneously arming DevOps teams (Bottom-Up) with technical proof points, demos, and fully supported pilots.
                     </p>
                     
-                    <div className="p-4 bg-white/10 rounded-xl border-l-4 border-[#6D28D9]">
-                        <p className="text-white font-medium italic">
-                            "By aligning these two drivers, we turned technical gatekeepers into internal champions and executives into trusted partners and confident buyers."
-                            - Diogo C. Marques, Head of GTM at Sensedia
+                    {/* UPDATED QUOTE SECTION */}
+                    <div className="p-6 bg-white/10 rounded-xl border-l-4 border-[#6D28D9]">
+                        <p className="text-white font-medium italic text-lg mb-4">
+                            &quot;By aligning these two drivers, we turned technical gatekeepers into internal champions and executives into trusted partners and confident buyers.&quot;
+                        </p>
+                        <p className="text-gray-400 text-sm font-semibold uppercase tracking-wide">
+                            - Diogo C. Marques
+                        </p>
+                         <p className="text-gray-500 text-xs mt-1">
+                            Head of GTM at Sensedia
                         </p>
                     </div>
                 </div>
