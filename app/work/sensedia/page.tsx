@@ -200,7 +200,8 @@ export default function CaseStudy() {
                     
                     <div className="p-4 bg-white/10 rounded-xl border-l-4 border-[#6D28D9]">
                         <p className="text-white font-medium italic">
-                            "By aligning these two drivers, we turned technical gatekeepers into internal champions and executives into trusted partners and confident buyers." - Diogo C. Marques, Head of Marketing & Partnerships at Sensedia
+                            "By aligning these two drivers, we turned technical gatekeepers into internal champions and executives into trusted partners and confident buyers."
+                            - Diogo C. Marques, Head of GTM at Sensedia
                         </p>
                     </div>
                 </div>
