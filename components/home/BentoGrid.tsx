@@ -13,7 +13,7 @@ const items = [
   },
   { 
     title: "MyBambu", 
-    desc: "Fintech 0-1 Launch", 
+    desc: "The Sprint: Fintech 0→1 Launch", 
     year: "2020", 
     img: "/project2.png",
     pdf: "/work/mybambu"
@@ -27,7 +27,7 @@ const items = [
   },
   { 
     title: "GreenRoads", 
-    desc: "Social Media Campaigns", 
+    desc: "Social Media Content Strategy", 
     year: "2016", 
     img: "/project4.webp",
     pdf: "/work/greenroads"
