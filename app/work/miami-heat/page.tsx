@@ -66,7 +66,7 @@ export default function CaseStudy() {
 
         {/* 1. THE CHALLENGE */}
         <div className="md:col-span-12 bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-gray-100">
-            <h3 className="text-3xl font-bold text-[#1d1d1f] mb-6">The Challenge: Capturing the Soul of Miami</h3>
+            <h3 className="text-3xl font-bold text-[#1d1d1f] mb-6">Capturing the Soul of Miami</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 <div className="text-lg text-gray-600 leading-relaxed space-y-6">
                     <p>
@@ -123,7 +123,7 @@ export default function CaseStudy() {
 
             <div className="relative z-10 text-center mb-16">
                 <p className="text-xl md:text-2xl text-white font-medium max-w-4xl mx-auto leading-relaxed">
-                    &quot;In 2017-18 Miami sold more jerseys than the other 29 NBA teams combined.&quot;
+                    In 2017-18 Miami sold more jerseys than the other 29 NBA teams combined.
                 </p>
             </div>
 
