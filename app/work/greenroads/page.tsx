@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import { ArrowLeft, Leaf, ShieldCheck, Heart, TrendingUp, Users, Star, ShoppingCart, Award, MessageCircle } from "lucide-react";
+import { ArrowLeft, Leaf, ShieldCheck, Heart, TrendingUp, Users, Star, ShoppingCart, Award, MessageCircle, BarChart3 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -118,7 +118,7 @@ export default function CaseStudy() {
             </p>
         </div>
 
-        {/* 3. MARKET LEADERSHIP (Dark Green Card) */}
+        {/* 3. MARKET LEADERSHIP (Updated with 4 Stats) */}
         <div className="md:col-span-12 bg-[#064E3B] rounded-3xl p-8 md:p-16 text-white shadow-2xl relative overflow-hidden">
              {/* Background Gradient */}
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#10B981] rounded-full blur-[160px] opacity-20 -mr-20 -mt-20 pointer-events-none"></div>
@@ -128,7 +128,8 @@ export default function CaseStudy() {
                 <p className="text-2xl text-emerald-300 font-medium">We defined it.</p>
             </div>
 
-            <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+            <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 text-center">
+                
                 {/* Stat 1 */}
                 <div className="space-y-2">
                     <TrendingUp className="w-8 h-8 text-[#10B981] mx-auto mb-4" />
@@ -148,6 +149,13 @@ export default function CaseStudy() {
                      <Star className="w-8 h-8 text-[#10B981] mx-auto mb-4" />
                     <h4 className="text-5xl font-bold text-white tracking-tight">30k</h4>
                     <p className="text-sm font-bold uppercase tracking-wide text-emerald-200">Five Star Reviews</p>
+                </div>
+
+                {/* Stat 4 (NEW) */}
+                <div className="space-y-2">
+                     <BarChart3 className="w-8 h-8 text-[#10B981] mx-auto mb-4" />
+                    <h4 className="text-5xl font-bold text-white tracking-tight">95%</h4>
+                    <p className="text-sm font-bold uppercase tracking-wide text-emerald-200">Revenue Growth</p>
                 </div>
             </div>
         </div>

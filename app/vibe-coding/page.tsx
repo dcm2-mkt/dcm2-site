@@ -112,4 +112,4 @@ export default function VibeCoding() {
 
     </main>
   );
-}
+}//added img
