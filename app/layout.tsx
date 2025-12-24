@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
+// 1. Import Vercel Analytics
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,7 +19,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   
-  // This tells Google: "This is a real brand/person website"
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
@@ -38,8 +39,12 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <Navbar />
+        
         {children}
         
+        {/* 2. Add the Analytics Component here */}
+        <Analytics />
+
         <footer className="py-10 text-center text-sm text-gray-500">
             © DCM2 2026
         </footer>
