@@ -45,6 +45,19 @@ const CARD_CLASS = `
 `;
 
 export default function BentoGrid() {
+  
+ // --- TRACKING FUNCTION START (TypeScript Fixed) ---
+  const trackProjectClick = (projectName: string) => { // Added ': string' type
+    // We cast window to 'any' so TypeScript doesn't complain that 'gtag' is missing
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'project_click', {
+        event_category: 'Portfolio',
+        event_label: projectName,
+      });
+    }
+  };
+  // --- TRACKING FUNCTION END ---
+
   return (
     <section id="work" className="max-w-7xl mx-auto px-6 py-24">
       <h2 className="text-4xl font-semibold tracking-tight text-[#1d1d1f] mb-12">Case Studies</h2>
@@ -57,7 +70,7 @@ export default function BentoGrid() {
           {/* Item 1: Sensedia */}
           <motion.a
             href={items[0].pdf}
-            // REMOVED target="_blank" so it opens in same tab
+            onClick={() => trackProjectClick(items[0].title)} // <--- Added Tracking
             className={`${CARD_CLASS} md:flex-[2] md:hover:flex-[3]`}
             style={{ isolation: 'isolate' }} 
           >
@@ -86,7 +99,7 @@ export default function BentoGrid() {
           {/* Item 2: MyBambu */}
           <motion.a
             href={items[1].pdf}
-            // REMOVED target="_blank"
+            onClick={() => trackProjectClick(items[1].title)} // <--- Added Tracking
             className={`${CARD_CLASS} md:flex-[1] md:hover:flex-[3]`}
             style={{ isolation: 'isolate' }}
           >
@@ -119,7 +132,7 @@ export default function BentoGrid() {
           {/* Item 3: Miami Heat */}
           <motion.a
             href={items[2].pdf}
-            // REMOVED target="_blank"
+            onClick={() => trackProjectClick(items[2].title)} // <--- Added Tracking
             className={`${CARD_CLASS} md:flex-[1] md:hover:flex-[3]`}
             style={{ isolation: 'isolate' }}
           >
@@ -148,7 +161,7 @@ export default function BentoGrid() {
           {/* Item 4: GreenRoads */}
           <motion.a
             href={items[3].pdf}
-            // REMOVED target="_blank"
+            onClick={() => trackProjectClick(items[3].title)} // <--- Added Tracking
             className={`${CARD_CLASS} md:flex-[2] md:hover:flex-[3]`}
             style={{ isolation: 'isolate' }}
           >
