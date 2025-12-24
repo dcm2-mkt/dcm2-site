@@ -7,7 +7,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "DCM2 | Diogo C Marques",
-  description: "Growth Marketing",
+  description: "Growth Marketing Portfolio & Case Studies",
+  metadataBase: new URL('https://dcm2.com'),
 };
 
 export default function RootLayout({
@@ -15,13 +16,30 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
+  // This tells Google: "This is a real brand/person website"
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'DCM2 | Diogo C Marques',
+    url: 'https://dcm2.com',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: 'https://dcm2.com/?q={search_term_string}',
+      'query-input': 'required name=search_term_string'
+    }
+  }
+
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <Navbar />
         {children}
         
-        {/* Footer */}
         <footer className="py-10 text-center text-sm text-gray-500">
             © DCM2 2026
         </footer>
