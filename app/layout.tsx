@@ -62,7 +62,7 @@ export default function RootLayout({
         <Analytics />
 
         <footer className="py-10 text-center text-sm text-gray-500">
-            © DCM2 2026
+            This site uses Google Analytics to understand traffic. No personal data is sold. © DCM2 2026
         </footer>
       </body>
     </html>
