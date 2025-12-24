@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
-// 1. Import Vercel Analytics
 import { Analytics } from "@vercel/analytics/react";
+// 1. Import Script for GA4
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,15 +35,31 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
+        {/* SEO JSON-LD */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <Navbar />
         
+        {/* --- GOOGLE ANALYTICS START --- */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-PZPYJSNKDE"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-PZPYJSNKDE');
+          `}
+        </Script>
+        {/* --- GOOGLE ANALYTICS END --- */}
+
+        <Navbar />
         {children}
         
-        {/* 2. Add the Analytics Component here */}
+        {/* Vercel Analytics */}
         <Analytics />
 
         <footer className="py-10 text-center text-sm text-gray-500">
