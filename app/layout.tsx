@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import { Analytics } from "@vercel/analytics/react";
-// 1. Import Script for GA4
 import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
