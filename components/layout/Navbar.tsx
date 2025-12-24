@@ -4,35 +4,81 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
 
- const links = [
-    { name: "Case Studies", href: "/#work" },   // Scrolls to the Bento Grid on Home
-    { name: "Vibe Coding", href: "/vibe-coding" }, // Points to the new page (we need to create this!)
-    { name: "About Me", href: "/about" },       // Points to your About page
+  const links = [
+    { name: "Case Studies", href: "/#work" },
+    { name: "Vibe Coding", href: "/vibe-coding" },
+    { name: "About Me", href: "/about" },
   ];
 
+  // This function handles the cross-page scrolling issue
+  const handleNavigation = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    // If it's a regular link (no hash) or we are just closing the menu, do nothing special
+    if (!href.includes("#")) {
+      setIsOpen(false);
+      return;
+    }
+
+    // Isolate the target ID (e.g., "work")
+    const targetId = href.replace("/#", "");
+
+    // If we are NOT on the homepage, we need to help the browser
+    if (pathname !== "/") {
+      e.preventDefault(); // Stop the default jump
+      setIsOpen(false); // Close mobile menu
+      router.push("/"); // Go to home
+
+      // Wait 100ms for the home page to mount, then scroll
+      setTimeout(() => {
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    } else {
+      // If we ARE on the homepage, just close the menu and let default anchor behavior happen
+      setIsOpen(false);
+    }
+  };
+
   return (
-    <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-gray-200/50">
+    // Updated z-index to 100 to stay above ScrollTracker
+    <nav className="fixed top-0 w-full z-[100] bg-white/80 backdrop-blur-xl border-b border-gray-200/50">
       <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="text-xl font-semibold tracking-tighter text-black z-50">
+        <Link 
+          href="/" 
+          className="text-xl font-semibold tracking-tighter text-black z-50"
+          onClick={() => setIsOpen(false)}
+        >
           Diogo C. Marques
         </Link>
 
         {/* Desktop Nav */}
         <div className="hidden md:flex gap-8 text-sm font-medium text-gray-600">
           {links.map((link) => (
-            <Link key={link.name} href={link.href} className="hover:text-black transition-colors">
+            <Link 
+              key={link.name} 
+              href={link.href} 
+              onClick={(e) => handleNavigation(e, link.href)}
+              className="hover:text-black transition-colors"
+            >
               {link.name}
             </Link>
           ))}
         </div>
 
         {/* Mobile Hamburger */}
-        <button className="md:hidden z-50 text-black" onClick={() => setIsOpen(!isOpen)}>
+        <button 
+          className="md:hidden z-50 text-black" 
+          onClick={() => setIsOpen(!isOpen)}
+        >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
@@ -47,7 +93,7 @@ export default function Navbar() {
               <Link 
                 key={link.name} 
                 href={link.href} 
-                onClick={() => setIsOpen(false)}
+                onClick={(e) => handleNavigation(e, link.href)}
                 className="text-2xl font-semibold tracking-tight text-black"
               >
                 {link.name}
