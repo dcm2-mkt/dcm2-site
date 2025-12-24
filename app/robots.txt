@@ -1,11 +1,28 @@
 import { MetadataRoute } from 'next'
- 
+
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-    },
+    rules: [
+      {
+        // 1. Allow General Search Engines (Google, Bing)
+        userAgent: '*',
+        allow: '/',
+        disallow: ['/api/', '/admin/', '/_next/', '/private/'], // Block technical/private paths
+      },
+      {
+        // 2. Explicitly Allow AI & LLM Bots (The "AEO" Strategy)
+        // This tells them "Yes, please read my content and use it for answers."
+        userAgent: [
+          'GPTBot',           // ChatGPT
+          'Google-Extended',  // Gemini / Bard
+          'Claude-Web',       // Anthropic Claude
+          'PerplexityBot',    // Perplexity AI
+          'CCBot',            // Common Crawl (Used by many LLMs)
+          'Applebot-Extended' // Apple Intelligence
+        ],
+        allow: '/',
+      }
+    ],
     sitemap: 'https://dcm2.com/sitemap.xml',
   }
 }
