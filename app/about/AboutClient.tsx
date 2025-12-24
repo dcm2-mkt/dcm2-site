@@ -78,11 +78,12 @@ export default function AboutPage() {
       
       {/* 1. Header / Back Link Area */}
       <div className="max-w-6xl mx-auto px-6 mb-12">
-        <Link href="/">
-          <Button variant="ghost" className="-ml-4 text-gray-500 hover:text-black transition-colors">
+        {/* FIX APPLIED HERE: Added 'asChild' and moved Link inside */}
+        <Button asChild variant="ghost" className="-ml-4 text-gray-500 hover:text-black transition-colors">
+          <Link href="/">
             <ArrowLeft className="w-4 h-4 mr-2" /> Back Home
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       </div>
 
       {/* 2. Main Grid Layout */}
@@ -145,22 +146,20 @@ export default function AboutPage() {
           <div className="pt-4 flex flex-col sm:flex-row gap-4">
             
             {/* Button 1: LinkedIn */}
-            <Link href="https://www.linkedin.com/in/dcm2/" target="_blank">
-              <Button className="w-[230px] rounded-full h-10 text-lg font-light tracking-wide text-white bg-[#1d1d1f] hover:bg-[#1d1d1f]/90 transition-transform hover:scale-[1.02]">
+            <Button asChild className="w-[230px] rounded-full h-10 text-lg font-light tracking-wide text-white bg-[#1d1d1f] hover:bg-[#1d1d1f]/90 transition-transform hover:scale-[1.02]">
+              <Link href="https://www.linkedin.com/in/dcm2/" target="_blank">
                 LinkedIn
                 <ArrowUpRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
+              </Link>
+            </Button>
 
             {/* Button 2: View Work (New) */}
-            <Link href="/#work">
-              <Button 
-                className={`w-[230px] rounded-full h-10 text-lg font-light tracking-wide bg-white text-gray-700 hover:bg-gray-50 hover:text-black transition-transform hover:scale-[1.02] ${SHADOW_EFFECT}`}
-              >
+            <Button asChild className={`w-[230px] rounded-full h-10 text-lg font-light tracking-wide bg-white text-gray-700 hover:bg-gray-50 hover:text-black transition-transform hover:scale-[1.02] ${SHADOW_EFFECT}`}>
+              <Link href="/#work">
                 View Work
                 <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
+              </Link>
+            </Button>
 
           </div>
 

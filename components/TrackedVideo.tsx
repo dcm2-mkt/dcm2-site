@@ -58,7 +58,7 @@ export default function TrackedVideo() {
       controls
       className="w-full rounded-lg shadow-lg" // <--- Add your specific styling classes here if needed
     >
-      <source src="/your-video-file.mp4" type="video/mp4" />
+      <source src="/DCM-Intro.mp4" type="video/mp4" />
     </video>
   )
 }

@@ -11,11 +11,12 @@ export default function CaseStudy() {
       
       {/* --- HEADER --- */}
       <div className="max-w-6xl mx-auto mb-12">
-        <Link href="/#work">
-          <Button variant="ghost" className="-ml-4 text-gray-500 hover:text-black transition-colors">
+        {/* FIX APPLIED HERE: Added 'asChild' and moved Link inside */}
+        <Button asChild variant="ghost" className="-ml-4 text-gray-500 hover:text-black transition-colors">
+          <Link href="/#work">
             <ArrowLeft className="w-4 h-4 mr-2" /> Back to Work
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       </div>
 
       {/* --- HERO SECTION --- */}

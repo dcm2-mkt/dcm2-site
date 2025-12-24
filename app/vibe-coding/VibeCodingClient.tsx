@@ -47,11 +47,12 @@ export default function VibeCoding() {
         transition={{ duration: 0.5 }}
         className="max-w-3xl mb-16"
       >
-        <Link href="/">
-            <Button variant="ghost" className="mb-8 -ml-4 text-gray-500 hover:text-black">
+        {/* FIX APPLIED HERE: Added 'asChild' and moved Link inside */}
+        <Button asChild variant="ghost" className="mb-8 -ml-4 text-gray-500 hover:text-black">
+            <Link href="/">
               <ArrowLeft className="w-4 h-4 mr-2" /> Back Home
-            </Button>
-        </Link>
+            </Link>
+        </Button>
         
         <h1 className="text-5xl md:text-6xl font-semibold tracking-tighter text-[#1d1d1f] mb-6">
           Vibe Coding.
@@ -112,4 +113,4 @@ export default function VibeCoding() {
 
     </main>
   );
-}//added img
+}
