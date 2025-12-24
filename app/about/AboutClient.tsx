@@ -77,7 +77,7 @@ export default function AboutPage() {
     <main className="min-h-screen bg-white pt-32 pb-20">
       
       {/* 1. Header / Back Link Area */}
-      <div className="max-w-6xl mx-auto px-6 mb-12">
+      <div className="max-w-6xl mx-auto px-6 mb-12 relative z-50">
         {/* FIX APPLIED HERE: Added 'asChild' and moved Link inside */}
         <Button asChild variant="ghost" className="-ml-4 text-gray-500 hover:text-black transition-colors">
           <Link href="/">

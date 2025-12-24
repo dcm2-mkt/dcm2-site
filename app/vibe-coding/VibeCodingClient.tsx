@@ -45,7 +45,7 @@ export default function VibeCoding() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="max-w-3xl mb-16"
+        className="max-w-3xl mb-16 relative z-50"
       >
         {/* FIX APPLIED HERE: Added 'asChild' and moved Link inside */}
         <Button asChild variant="ghost" className="mb-8 -ml-4 text-gray-500 hover:text-black">

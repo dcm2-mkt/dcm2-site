@@ -10,7 +10,7 @@ export default function GreenRoadsClient() {
     <main className="min-h-screen bg-[#F5F5F7] pt-32 pb-24 px-6">
       
       {/* --- HEADER --- */}
-      <div className="max-w-6xl mx-auto mb-12">
+      <div className="max-w-6xl mx-auto mb-12 relative z-50">
         {/* FIX APPLIED HERE: Added 'asChild' and moved Link inside */}
         <Button asChild variant="ghost" className="-ml-4 text-gray-500 hover:text-black transition-colors">
           <Link href="/#work">
