@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, ArrowRight, Volume2, VolumeX } from "lucide-react";
@@ -10,7 +10,61 @@ const SHADOW_EFFECT = "shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1),0_24px_40px_-6px_r
 
 export default function AboutPage() {
   const [isMuted, setIsMuted] = useState(true);
+  
+  // Tracking states to prevent spamming Google with the same event
+  const [hasTracked10s, setHasTracked10s] = useState(false);
+  const [hasTrackedUnmute, setHasTrackedUnmute] = useState(false);
+  
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // --- TRACKING LOGIC START ---
+  const trackEvent = (action: string) => {
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', `video_${action}`, {
+        event_category: 'About Me Video',
+        event_label: 'Intro Story',
+      });
+    }
+  };
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleTimeUpdate = () => {
+      // Metric 1: Track if they watched at least 10 seconds
+      if (video.currentTime > 10 && !hasTracked10s) {
+        trackEvent('watched_10s');
+        setHasTracked10s(true);
+      }
+    };
+
+    const handleVolumeChange = () => {
+      // Metric 2: Track if they manually unmuted
+      if (!video.muted && !hasTrackedUnmute) {
+        trackEvent('unmuted');
+        setHasTrackedUnmute(true);
+      }
+    };
+
+    const handleEnded = () => {
+      // Metric 3: Completion
+      trackEvent('complete');
+    };
+
+    // Attach listeners
+    video.addEventListener('timeupdate', handleTimeUpdate);
+    video.addEventListener('volumechange', handleVolumeChange);
+    video.addEventListener('ended', handleEnded);
+
+    // Cleanup listeners when component unmounts
+    return () => {
+      video.removeEventListener('timeupdate', handleTimeUpdate);
+      video.removeEventListener('volumechange', handleVolumeChange);
+      video.removeEventListener('ended', handleEnded);
+    };
+  }, [hasTracked10s, hasTrackedUnmute]); // dependencies ensure we don't duplicate listeners
+  // --- TRACKING LOGIC END ---
 
   const toggleSound = () => {
     if (videoRef.current) {
