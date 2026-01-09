@@ -31,6 +31,12 @@ const tools = [
     img: "/tool4.png",
     link: "https://dcm2worldcup2026picker.netlify.app/"
   },
+  {
+    title: "Gantt Chart Builder",
+    desc: "Create, visualize, and export project timelines with a fully interactive, mobile-responsive Gantt chart builder.",
+    img: "/gantt.webp", // Updated filename here
+    link: "https://gantt-chart-builder-dcm2.netlify.app/"
+  },
 ];
 
 // High-end shadow style
@@ -47,7 +53,6 @@ export default function VibeCoding() {
         transition={{ duration: 0.5 }}
         className="max-w-3xl mb-16 relative z-50"
       >
-        {/* FIX APPLIED HERE: Added 'asChild' and moved Link inside */}
         <Button asChild variant="ghost" className="mb-8 -ml-4 text-gray-500 hover:text-black">
             <Link href="/">
               <ArrowLeft className="w-4 h-4 mr-2" /> Back Home
@@ -72,12 +77,10 @@ export default function VibeCoding() {
             href={item.link}
             target="_blank"
             rel="noopener noreferrer"
-            // UPDATE: Removed slide-in (y:20), used Fade Only for stability
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ delay: i * 0.1, duration: 0.5 }}
             viewport={{ once: true }}
-            // UPDATE: Height is now md:h-[500px] to match Bento Grid
             className={`group relative h-96 md:h-[500px] rounded-3xl overflow-hidden cursor-pointer block 
             ${SHADOW_EFFECT} 
             transform-gpu will-change-transform`}
@@ -88,13 +91,10 @@ export default function VibeCoding() {
                 src={item.img} 
                 alt={item.title} 
                 fill 
-                priority={i < 2} // Load first 2 images instantly
+                priority={i < 2} 
                 sizes="(max-width: 768px) 100vw, 50vw"
-                // UPDATE: Removed blur-[2px]. Removed mobile scale. 
-                // Only gentle zoom on desktop hover (md:group-hover:scale-105).
                 className="object-cover transition-transform duration-700 md:group-hover:scale-105"
               />
-              {/* UPDATE: Removed the dark bg-black/10 overlay entirely */}
             </div>
 
             {/* Floating Info Card */}
