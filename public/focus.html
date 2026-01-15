@@ -2,531 +2,553 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Focus Time | Daily Productivity Booster</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Focus Time">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        
-        /* Animations */
-        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
-        .slide-up { animation: slideUp 0.4s ease-out forwards; }
-        .slide-out-right { animation: slideOutRight 0.4s ease-in forwards; }
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         .scale-in { animation: scaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .slide-out-right { animation: slideOutRight 0.4s ease-in forwards; }
+        .slide-up { animation: slideUp 0.4s ease-out forwards; }
+        .slide-in-right { animation: slideInRight 0.4s ease-out forwards; }
         
-        /* Pulse Animation for Overdue Tasks */
+        @keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideOutRight { to { opacity: 0; transform: translateX(100%); max-height: 0; margin: 0; padding: 0; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Urgent Pulse Animation */
         @keyframes pulse-red {
             0% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.7); }
             70% { box-shadow: 0 0 0 15px rgba(225, 29, 72, 0); }
             100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); }
         }
-        .animate-pulse-urgent {
-            animation: pulse-red 2s infinite;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideOutRight { to { opacity: 0; transform: translateX(100px); max-height: 0; margin: 0; padding: 0; } }
-        @keyframes scaleIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .animate-pulse-urgent { animation: pulse-red 2s infinite; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen p-6 md:p-12 pb-32">
+<body class="bg-slate-50 text-slate-800 min-h-screen p-4 md:p-12 pb-32">
 
-    <div class="max-w-3xl mx-auto">
+    <div class="max-w-4xl mx-auto">
         
-        <div class="mb-8 flex items-center justify-between">
+        <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-                <h1 class="text-4xl font-black tracking-tighter text-slate-900">Focus Time</h1>
+                <h1 class="text-3xl md:text-5xl font-black tracking-tighter text-slate-900">Focus Time</h1>
                 <p class="text-slate-500 font-medium">Daily Productivity Booster</p>
             </div>
-            <div class="text-right hidden md:block">
-                <div id="date" class="text-xs text-slate-400 uppercase tracking-widest font-bold">Loading...</div>
+            
+            <div class="flex items-center gap-3">
+                <button onclick="requestPermsManual()" class="group flex items-center gap-2 px-4 py-2 bg-white rounded-full text-slate-500 hover:text-slate-900 shadow-sm border border-slate-200 transition-all hover:shadow-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    <span class="text-xs font-bold uppercase tracking-wide">Enable Sound</span>
+                </button>
+
+                <div id="wakeStatus" class="hidden text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-2 rounded-full border border-emerald-100 items-center gap-2">
+                    <span class="relative flex h-2 w-2">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span>AWAKE</span>
+                </div>
             </div>
         </div>
 
-        <div class="md:hidden bg-white p-6 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 mb-10 scale-in relative min-h-[220px]">
-            
+        <div class="md:hidden bg-white p-6 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 mb-8 scale-in relative min-h-[220px]">
             <form onsubmit="event.preventDefault();" id="mobileForm">
                 
                 <div id="step1" class="step-content">
-                    <label class="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Step 1/3: What needs doing?</label>
-                    <input type="text" id="mTaskName" placeholder="e.g. Write Proposal" autocomplete="off"
+                    <label class="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Step 1/3: Task Name</label>
+                    <input type="text" id="mName" placeholder="e.g. Write Proposal" autocomplete="off"
                         onkeydown="if(event.key==='Enter'){event.preventDefault(); nextStep(2);}"
-                        class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 transition-all font-medium text-lg placeholder-slate-300 mb-4">
-                    
-                    <button type="button" onclick="nextStep(2)" class="w-full bg-slate-900 text-white font-bold py-4 rounded-lg flex justify-center items-center gap-2">
-                        <span>Next: Time</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900 transition-all font-medium text-lg placeholder-slate-300 mb-4">
+                    <button type="button" onclick="nextStep(2)" class="w-full bg-slate-900 text-white font-bold py-4 rounded-xl flex justify-center items-center gap-2">
+                        Next <span>→</span>
                     </button>
                 </div>
 
                 <div id="step2" class="step-content hidden">
-                    <div class="flex items-center justify-between mb-2">
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Step 2/3: How long?</label>
-                        <button type="button" onclick="prevStep(1)" class="text-xs font-bold text-slate-400 hover:text-slate-600 flex items-center gap-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> Back
-                        </button>
+                    <div class="flex justify-between mb-2">
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Step 2/3: Duration</label>
+                        <button type="button" onclick="prevStep(1)" class="text-xs font-bold text-slate-400 hover:text-slate-800">← Back</button>
                     </div>
-                    <select id="mTaskDuration" 
+                    <select id="mDuration" 
                         onkeydown="if(event.key==='Enter'){event.preventDefault(); nextStep(3);}"
-                        class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 cursor-pointer font-medium text-lg mb-4">
+                        class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900 font-medium text-lg mb-4">
                         <option value="0.25">15 mins</option>
                         <option value="0.5">30 mins</option>
                         <option value="0.75">45 mins</option>
                         <option value="1.0" selected>1 hour</option>
                         <option value="1.5">1 hr 30 mins</option>
                         <option value="2.0">2 hours</option>
-                        <option value="3.0">3 hours</option>
                         <option value="4.0">4 hours</option>
                     </select>
-
-                    <button type="button" onclick="nextStep(3)" class="w-full bg-slate-900 text-white font-bold py-4 rounded-lg flex justify-center items-center gap-2">
-                        <span>Next: Category</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    <button type="button" onclick="nextStep(3)" class="w-full bg-slate-900 text-white font-bold py-4 rounded-xl flex justify-center items-center gap-2">
+                        Next <span>→</span>
                     </button>
                 </div>
 
                 <div id="step3" class="step-content hidden">
-                    <div class="flex items-center justify-between mb-2">
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Step 3/3: Priority?</label>
-                        <button type="button" onclick="prevStep(2)" class="text-xs font-bold text-slate-400 hover:text-slate-600 flex items-center gap-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg> Back
-                        </button>
+                    <div class="flex justify-between mb-2">
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Step 3/3: Priority</label>
+                        <button type="button" onclick="prevStep(2)" class="text-xs font-bold text-slate-400 hover:text-slate-800">← Back</button>
                     </div>
-                    <select id="mTaskCategory" 
-                        onkeydown="if(event.key==='Enter'){event.preventDefault(); addMobileTask();}"
-                        class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 cursor-pointer font-medium text-lg mb-4">
-                        <option value="Urgent">🔥 Urgent (x5)</option>
-                        <option value="Necessary" selected>⚡ Necessary (x3)</option>
-                        <option value="Maintenance">🧹 Maintenance (x1)</option>
+                    <select id="mCategory" 
+                        onkeydown="if(event.key==='Enter'){event.preventDefault(); submitMobileTask();}"
+                        class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900 font-medium text-lg mb-4">
+                        <option value="Urgent">🔥 Urgent (Top)</option>
+                        <option value="Necessary" selected>⚡ Necessary</option>
+                        <option value="Maintenance">🧹 Maintenance (Bottom)</option>
                     </select>
-
-                    <button type="button" onclick="addMobileTask()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 rounded-lg flex justify-center items-center gap-2 shadow-lg shadow-emerald-200">
-                        <span>+ Add Task</span>
+                    <button type="button" onclick="submitMobileTask()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-emerald-200">
+                        + Add Task
                     </button>
                 </div>
-
             </form>
         </div>
 
-        <div class="hidden md:block bg-white p-6 md:p-8 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 mb-10 scale-in">
-            <form onsubmit="event.preventDefault(); addDesktopTask();" class="grid grid-cols-1 md:grid-cols-12 gap-5 items-end">
-                <div class="md:col-span-5">
+        <div class="hidden md:block bg-white p-6 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 mb-10 scale-in">
+            <form onsubmit="event.preventDefault(); submitDesktopTask();" class="grid grid-cols-12 gap-4 items-end">
+                <div class="col-span-5">
                     <label class="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Task Name</label>
-                    <input type="text" id="dTaskName" placeholder="e.g. Quick Email Check" autocomplete="off"
-                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 transition-all font-medium placeholder-slate-300">
+                    <input type="text" id="dName" placeholder="e.g. Q4 Strategy Review" autocomplete="off"
+                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900 transition-all font-medium placeholder-slate-300">
                 </div>
-                <div class="md:col-span-4">
-                    <label class="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Category</label>
-                    <select id="dTaskCategory" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 cursor-pointer font-medium">
-                        <option value="Urgent">🔥 Urgent (x5)</option>
-                        <option value="Necessary" selected>⚡ Necessary (x3)</option>
-                        <option value="Maintenance">🧹 Maintenance (x1)</option>
-                    </select>
-                </div>
-                <div class="md:col-span-3">
-                    <label class="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Time Allotted</label>
-                    <select id="dTaskDuration" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 cursor-pointer">
+                <div class="col-span-3">
+                    <label class="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Duration</label>
+                    <select id="dDuration" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900 cursor-pointer font-medium">
                         <option value="0.25">15 mins</option>
                         <option value="0.5">30 mins</option>
                         <option value="0.75">45 mins</option>
                         <option value="1.0" selected>1 hour</option>
                         <option value="1.5">1 hr 30 mins</option>
                         <option value="2.0">2 hours</option>
-                        <option value="3.0">3 hours</option>
                         <option value="4.0">4 hours</option>
                     </select>
                 </div>
-                <div class="md:col-span-12 mt-2">
-                    <button type="submit" class="w-full bg-slate-900 hover:bg-black text-white font-bold py-3 rounded-lg shadow-lg shadow-slate-300 transition-all active:scale-[0.98] flex justify-center items-center gap-2">
-                        <span>+ Add Task</span>
+                <div class="col-span-3">
+                    <label class="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Priority</label>
+                    <select id="dCategory" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900 cursor-pointer font-medium">
+                        <option value="Urgent">🔥 Urgent</option>
+                        <option value="Necessary" selected>⚡ Necessary</option>
+                        <option value="Maintenance">🧹 Maintenance</option>
+                    </select>
+                </div>
+                <div class="col-span-1">
+                    <button type="submit" class="w-full h-[50px] bg-slate-900 hover:bg-black text-white font-bold rounded-xl shadow-lg flex justify-center items-center transition-transform active:scale-95 text-xl">
+                        +
                     </button>
                 </div>
             </form>
         </div>
 
-        <div id="outputArea" class="hidden">
-            <div class="flex items-baseline justify-between mb-3">
-                <div class="uppercase tracking-widest text-xs font-bold text-slate-400">Live Focus</div>
-                <div class="flex items-center gap-2" id="liveIndicator">
-                    <span class="relative flex h-3 w-3">
-                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                      <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-                    </span>
-                    <span class="text-xs font-bold text-emerald-500">IN PROGRESS</span>
-                </div>
-            </div>
-
-            <div id="focusContainer"></div>
-
-            <div class="mb-4 uppercase tracking-widest text-xs font-bold text-slate-400">Up Next</div>
-            <div id="taskList" class="space-y-3 mb-16"></div>
+        <div id="installBtnContainer" class="hidden mb-8">
+            <button id="pwaInstallBtn" class="w-full md:w-auto md:px-8 bg-white border-2 border-slate-900 text-slate-900 font-bold py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-slate-50 transition-all mx-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Install App
+            </button>
         </div>
 
-        <div id="emptyState" class="text-center py-20 opacity-40 fade-in">
-            <div class="text-6xl mb-6 grayscale">⏳</div>
-            <p class="text-slate-400 font-medium">Your queue is empty.</p>
-            <p class="text-slate-300 text-sm mt-2">Add a task to start.</p>
+        <div id="focusContainer" class="hidden mb-8"></div>
+
+        <div id="queueContainer" class="hidden">
+            <h3 class="uppercase tracking-widest text-xs font-bold text-slate-400 mb-4 pl-1">Up Next</h3>
+            <div id="queueList" class="space-y-3"></div>
         </div>
 
-        <div id="completedArea" class="hidden border-t-2 border-slate-100 pt-8 mt-8">
-            <div class="flex items-center gap-2 mb-6">
-                <span class="text-2xl">🏆</span>
-                <h3 class="text-lg font-bold text-slate-800">Accomplished</h3>
-                <span id="completedCount" class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded-full">0</span>
-            </div>
-            <div id="completedList" class="space-y-3 opacity-75 hover:opacity-100 transition-opacity duration-300"></div>
+        <div id="emptyState" class="text-center py-20 opacity-50 bg-white/50 rounded-3xl border border-dashed border-slate-300">
+            <div class="text-6xl mb-4 grayscale">⏳</div>
+            <p class="text-slate-400 font-medium text-lg">Your queue is empty.</p>
+            <p class="text-slate-300 text-sm">Add a task to start.</p>
+        </div>
+
+        <div id="completedContainer" class="hidden pt-8 border-t border-slate-200 mt-8">
+            <h3 class="flex items-center gap-3 text-lg font-bold text-slate-800 mb-6">
+                <span>🏆 Accomplished</span>
+                <span id="doneCount" class="bg-emerald-100 text-emerald-700 text-xs px-2.5 py-1 rounded-full">0</span>
+            </h3>
+            <div id="completedList" class="space-y-3 opacity-70"></div>
         </div>
 
     </div>
 
-    <script>
-        // --- 1. CONFIGURATION ---
-        const PHI = 2.0; 
-        const WEIGHTS = { "Urgent": 5, "Necessary": 3, "Maintenance": 1 };
+    <div id="iosInstallOverlay" class="hidden fixed inset-0 bg-slate-900/90 z-[100] flex flex-col justify-end pb-10 px-6 backdrop-blur-sm" onclick="this.classList.add('hidden')">
+        <div class="text-white text-center mb-4 animate-bounce text-3xl">⬇</div>
+        <div class="bg-white rounded-2xl p-6 text-center shadow-2xl relative slide-up">
+            <button class="absolute top-4 right-4 text-slate-400 hover:text-slate-800" onclick="document.getElementById('iosInstallOverlay').classList.add('hidden')">✕</button>
+            <h3 class="text-xl font-black text-slate-900 mb-2">Install App</h3>
+            <p class="text-slate-600 mb-4 leading-relaxed">
+                To add this app to your home screen:
+            </p>
+            <ol class="text-left text-sm text-slate-700 space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-100 mx-auto max-w-xs">
+                <li class="flex items-center gap-3">
+                    <span class="bg-slate-200 w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs">1</span>
+                    <span>Tap the <strong class="text-blue-600">Share</strong> button <svg class="inline w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg></span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <span class="bg-slate-200 w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs">2</span>
+                    <span>Scroll down</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <span class="bg-slate-200 w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs">3</span>
+                    <span>Select <strong>Add to Home Screen</strong></span>
+                </li>
+            </ol>
+        </div>
+    </div>
 
-        // --- 2. STATE ---
+    <script>
+        // --- CONFIGURATION ---
+        const WEIGHTS = { "Urgent": 5, "Necessary": 3, "Maintenance": 1 };
         let tasks = [];
         let completedTasks = [];
-        let audioCtx = null; 
-        let alarmTriggeredFor = null; 
+        let wakeLock = null;
+        let audioCtx = null;
+        let alarmHasPlayedForCurrent = false;
+        let deferredPrompt; 
 
-        // --- 3. SYSTEM LOOP ---
-        function sysLoop() {
-            const now = new Date();
-            if(document.getElementById('date')) {
-                document.getElementById('date').innerText = now.toLocaleDateString([], {weekday: 'long', month: 'short', day: 'numeric'});
-            }
+        // --- PWA LOGIC ---
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
 
-            if(tasks.length > 0) {
-                const focus = tasks[0];
-                if (!focus.startedAt) {
-                    focus.startedAt = new Date();
-                }
-                updateLiveBar(focus, now);
+        // Show Button if not installed
+        if (!isStandalone) {
+            const btnContainer = document.getElementById('installBtnContainer');
+            const btn = document.getElementById('pwaInstallBtn');
+            
+            // If iOS, show button but make it open help overlay
+            if (isIOS) {
+                btnContainer.classList.remove('hidden');
+                btn.onclick = () => {
+                    document.getElementById('iosInstallOverlay').classList.remove('hidden');
+                };
+            } else {
+                // If Android/Desktop, wait for install prompt event
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    e.preventDefault();
+                    deferredPrompt = e;
+                    btnContainer.classList.remove('hidden');
+                });
+
+                btn.addEventListener('click', async () => {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        const { outcome } = await deferredPrompt.userChoice;
+                        if (outcome === 'accepted') {
+                            btnContainer.classList.add('hidden');
+                        }
+                        deferredPrompt = null;
+                    }
+                });
             }
         }
-        setInterval(sysLoop, 1000); 
 
-        // --- 4. ALARM SOUND ENGINE ---
+        // --- CORE SYSTEM ---
+        setInterval(() => {
+            if (tasks.length > 0) {
+                const activeTask = tasks[0];
+                if (!activeTask.startedAt) {
+                    activeTask.startedAt = new Date(); 
+                    requestWakeLock();
+                }
+                updateActiveCard(activeTask);
+            }
+        }, 1000);
+
+        async function requestWakeLock() {
+            if ('wakeLock' in navigator && !wakeLock) {
+                try {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    document.getElementById('wakeStatus').classList.remove('hidden');
+                    document.getElementById('wakeStatus').classList.add('flex');
+                    wakeLock.addEventListener('release', () => {
+                        wakeLock = null;
+                        document.getElementById('wakeStatus').classList.add('hidden');
+                    });
+                } catch (err) { console.log('Wake Lock err:', err); }
+            }
+        }
+
+        function requestPermsManual() {
+            initAudio(); // Initialize audio context immediately on click
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    // Play a test beep to confirm
+                    triggerAlarm(); 
+                }
+            });
+        }
+
         function initAudio() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                // Silent buffer to unlock iOS audio
+                const buffer = audioCtx.createBuffer(1, 1, 22050); 
+                const source = audioCtx.createBufferSource();
+                source.buffer = buffer;
+                source.connect(audioCtx.destination);
+                source.start(0);
             }
         }
 
-        function playAlarm() {
-            initAudio(); 
-            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+        function triggerAlarm() {
+            // Browser Beep
+            if (audioCtx && audioCtx.state !== 'closed') {
+                if(audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
 
-            const osc = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
+                const now = audioCtx.currentTime;
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(800, now);
+                osc.frequency.setValueAtTime(0, now + 0.1); 
+                osc.frequency.setValueAtTime(800, now + 0.2);
+                
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.setValueAtTime(0.1, now + 0.3);
+                gain.gain.exponentialRampToValueAtTime(0.00001, now + 0.5);
 
-            osc.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            }
 
-            osc.type = 'square';
-            osc.frequency.setValueAtTime(880, audioCtx.currentTime); 
-            osc.frequency.setValueAtTime(440, audioCtx.currentTime + 0.1); 
-
-            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.5);
-
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.5);
-        }
-
-        // --- 5. MOBILE WIZARD LOGIC ---
-        function nextStep(stepNum) {
-            // Validate Step 1
-            if(stepNum === 2) {
-                const name = document.getElementById('mTaskName').value;
-                if(!name) { 
-                    document.getElementById('mTaskName').focus();
-                    return; 
-                }
+            // Notification
+            if ("Notification" in window && Notification.permission === "granted") {
+                new Notification("Task Complete!", {
+                    body: `"${tasks[0].name}" is overdue!`,
+                    icon: "/focus.png",
+                    requireInteraction: true 
+                });
             }
             
-            // Hide all steps
-            document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
-            // Show requested step
-            document.getElementById(`step${stepNum}`).classList.remove('hidden');
-
-            // Auto-focus next input (helps with Enter key flow)
-            if(stepNum === 2) document.getElementById('mTaskDuration').focus();
-            if(stepNum === 3) document.getElementById('mTaskCategory').focus();
+            // Vibrate
+            if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
         }
 
-        function prevStep(stepNum) {
-            document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`step${stepNum}`).classList.remove('hidden');
-        }
-
-        function addMobileTask() {
-            const name = document.getElementById('mTaskName').value;
-            const duration = parseFloat(document.getElementById('mTaskDuration').value);
-            const category = document.getElementById('mTaskCategory').value;
-
-            createTask(name, category, duration);
-            
-            // Reset Wizard
-            document.getElementById('mTaskName').value = '';
-            document.getElementById('mTaskDuration').value = '1.0'; // Default
-            document.getElementById('mTaskCategory').value = 'Necessary'; // Default
-            
-            // Go back to Step 1
-            prevStep(1);
-            document.getElementById('mTaskName').focus();
-        }
-
-        function addDesktopTask() {
-            const name = document.getElementById('dTaskName').value;
-            const category = document.getElementById('dTaskCategory').value;
-            const duration = parseFloat(document.getElementById('dTaskDuration').value);
-            
+        // --- INPUT HANDLERS (Mobile vs Desktop) ---
+        
+        function submitDesktopTask() {
+            const name = document.getElementById('dName').value;
             if(!name) return;
-
-            createTask(name, category, duration);
-
-            document.getElementById('dTaskName').value = '';
-            document.getElementById('dTaskName').focus();
+            const duration = parseFloat(document.getElementById('dDuration').value);
+            const category = document.getElementById('dCategory').value;
+            
+            addTask(name, duration, category);
+            
+            // Reset Desktop Form
+            document.getElementById('dName').value = '';
+            document.getElementById('dName').focus();
         }
 
-        function createTask(name, category, duration) {
-            initAudio(); 
+        function submitMobileTask() {
+            const name = document.getElementById('mName').value;
+            const duration = parseFloat(document.getElementById('mDuration').value);
+            const category = document.getElementById('mCategory').value;
+            
+            addTask(name, duration, category);
+
+            // Reset Mobile Form & Wizard
+            document.getElementById('mName').value = '';
+            document.getElementById('mDuration').value = '1.0';
+            document.getElementById('mCategory').value = 'Necessary';
+            prevStep(1);
+        }
+
+        function addTask(name, duration, category) {
+            // Init audio/perms on first add
+            initAudio();
+            if ("Notification" in window && Notification.permission === "default") {
+                Notification.requestPermission();
+            }
+
             tasks.push({
                 id: Date.now(),
                 name,
-                category,
                 duration,
-                startedAt: null 
+                category,
+                startedAt: null,
+                score: -WEIGHTS[category]
             });
-            recalcAndRender();
+            renderAll();
         }
 
-
-        // --- 6. CORE LOGIC ---
-        function removeTask(id) {
-            const el = document.getElementById(`task-${id}`);
-            if (el) {
-                el.classList.add('slide-out-right');
-                setTimeout(() => {
-                    tasks = tasks.filter(t => t.id !== id);
-                    recalcAndRender();
-                }, 400);
+        // --- WIZARD UI (Mobile Only) ---
+        function nextStep(n) {
+            if(n === 2) {
+                if(!document.getElementById('mName').value) return document.getElementById('mName').focus();
+                // Check perms on wizard flow
+                if ("Notification" in window && Notification.permission === "default") {
+                    Notification.requestPermission();
+                }
             }
+            document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`step${n}`).classList.remove('hidden');
+            if(n === 2) document.getElementById('mDuration').focus();
+            if(n === 3) document.getElementById('mCategory').focus();
         }
 
-        function completeFocusTask() {
-            if (tasks.length > 0) {
-                triggerConfetti();
-                const card = document.getElementById('focusCard');
-                if (card) { card.classList.add('slide-out-right'); }
-
-                setTimeout(() => {
-                    const doneTask = tasks.shift();
-                    doneTask.completedAt = new Date();
-                    completedTasks.unshift(doneTask);
-                    alarmTriggeredFor = null;
-
-                    recalcAndRender();
-                    renderCompletedList();
-                }, 400);
-            }
+        function prevStep(n) {
+            document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`step${n}`).classList.remove('hidden');
         }
 
-        function triggerConfetti() {
-            confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#10b981', '#34d399', '#fcd34d'] });
-        }
+        // --- RENDERING ---
+        function renderAll() {
+            const focusContainer = document.getElementById('focusContainer');
+            const queueContainer = document.getElementById('queueContainer');
+            const emptyState = document.getElementById('emptyState');
 
-        // --- 7. RENDERING & LIVE UPDATES ---
-
-        function recalcAndRender() {
             if (tasks.length === 0) {
-                document.getElementById('outputArea').classList.add('hidden');
-                document.getElementById('emptyState').classList.remove('hidden');
-            } else {
-                document.getElementById('outputArea').classList.remove('hidden');
-                document.getElementById('emptyState').classList.add('hidden');
+                focusContainer.classList.add('hidden');
+                queueContainer.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
             }
 
-            tasks.forEach(t => {
-                const weight = WEIGHTS[t.category] || 1;
-                t.score = -weight; 
-            });
+            emptyState.classList.add('hidden');
 
-            tasks.sort((a, b) => a.score - b.score);
+            // Sort (Keep Active [0] locked, sort rest)
+            if (tasks.length > 1) {
+                const active = tasks[0];
+                const others = tasks.slice(1);
+                others.sort((a, b) => a.score - b.score);
+                tasks = [active, ...others];
+            }
 
-            if(tasks.length > 0) {
-                if(tasks[0].startedAt === null) tasks[0].startedAt = new Date();
-                
-                renderFocusCard(tasks[0]); 
-                updateLiveBar(tasks[0], new Date()); 
-                renderList(tasks);
+            focusContainer.classList.remove('hidden');
+            const currentRenderedId = document.getElementById('activeCard')?.getAttribute('data-id');
+            if (currentRenderedId != tasks[0].id) {
+                focusContainer.innerHTML = buildActiveCardHTML(tasks[0]);
+                alarmHasPlayedForCurrent = false;
+            }
+
+            if (tasks.length > 1) {
+                queueContainer.classList.remove('hidden');
+                document.getElementById('queueList').innerHTML = tasks.slice(1).map((t, i) => `
+                    <div class="bg-white p-4 rounded-xl border border-slate-100 flex justify-between items-center text-slate-600 shadow-sm hover:border-slate-300 transition-colors slide-in-right" style="animation-delay: ${i * 0.1}s">
+                        <div class="flex items-center gap-4">
+                            <div class="h-8 w-8 min-w-[2rem] rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-400">${i+1}</div>
+                            <div>
+                                <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">${t.category}</div>
+                                <div class="font-bold text-slate-800">${t.name}</div>
+                            </div>
+                        </div>
+                        <button onclick="deleteTask(${t.id})" class="text-slate-300 hover:text-rose-500 p-2 transition-colors">✕</button>
+                    </div>
+                `).join('');
+            } else {
+                queueContainer.classList.add('hidden');
             }
         }
 
-        function updateLiveBar(focus, now) {
-            const elBar = document.getElementById('liveBar');
-            const elCard = document.getElementById('focusCard');
-            const elIndicator = document.getElementById('liveIndicator');
+        function updateActiveCard(task) {
+            const bar = document.getElementById('progressBar');
+            const card = document.getElementById('activeCard');
+            const indicator = document.getElementById('statusIndicator');
             
-            if(!elCard) return;
+            if (!bar || !card) return;
 
-            const msElapsed = now - focus.startedAt;
-            const msTotal = focus.duration * 3600000;
+            const now = new Date();
+            const msElapsed = now - task.startedAt;
+            const msTotal = task.duration * 3600000;
             const msRemaining = msTotal - msElapsed;
-            const progress = Math.max(0, (msRemaining / msTotal) * 100);
+
+            let pct = (msRemaining / msTotal) * 100;
             
-            if (msRemaining < 0) {
-                if(elIndicator) {
-                     elIndicator.innerHTML = `
-                        <span class="relative flex h-3 w-3">
-                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-                          <span class="relative inline-flex rounded-full h-3 w-3 bg-rose-500"></span>
-                        </span>
-                        <span class="text-xs font-bold text-rose-500">OVERDUE</span>
-                     `;
+            if (pct <= 0) {
+                pct = 0;
+                if (!card.classList.contains('bg-rose-600')) {
+                    card.className = "bg-rose-600 text-white p-8 md:p-12 rounded-3xl shadow-2xl relative overflow-hidden transition-colors duration-500 animate-pulse-urgent";
+                    indicator.innerHTML = `<span class="text-xs font-black bg-white text-rose-600 px-2 py-1 rounded">OVERDUE</span>`;
+                    document.getElementById('btnDone').classList.replace('bg-slate-900', 'bg-white');
+                    document.getElementById('btnDone').classList.replace('text-white', 'text-rose-600');
                 }
 
-                if (!elCard.classList.contains('bg-rose-600')) {
-                    elCard.className = "bg-rose-600 border-4 border-rose-800 rounded-xl shadow-2xl p-6 md:p-8 mb-10 relative overflow-hidden group animate-pulse-urgent text-white transition-colors duration-300";
-                    document.getElementById('btnComplete').className = "bg-white text-rose-600 hover:bg-rose-100 font-bold px-6 py-4 rounded-lg shadow-md transition-all flex items-center gap-2";
+                if (!alarmHasPlayedForCurrent) {
+                    triggerAlarm();
+                    alarmHasPlayedForCurrent = true;
+                    setTimeout(() => alarmHasPlayedForCurrent = false, 30000); 
                 }
-
-                if (alarmTriggeredFor !== focus.id) {
-                    playAlarm();
-                    alarmTriggeredFor = focus.id; 
-                    setTimeout(() => { alarmTriggeredFor = null; }, 30000); 
-                }
-
-                if(elBar) elBar.style.width = "0%";
-
             } else {
-                if(elIndicator) {
-                     elIndicator.innerHTML = `
-                        <span class="relative flex h-3 w-3">
-                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                          <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-                        </span>
-                        <span class="text-xs font-bold text-emerald-500">IN PROGRESS</span>
-                     `;
-                }
-                if(elBar) {
-                    elBar.style.width = `${progress}%`; 
-                }
+                bar.style.width = `${pct}%`;
             }
         }
 
-        function renderFocusCard(focus) {
-            const container = document.getElementById('focusContainer');
+        function buildActiveCardHTML(task) {
+            let borderColor = task.category === 'Urgent' ? 'border-l-8 border-rose-500' : 
+                              task.category === 'Necessary' ? 'border-l-8 border-emerald-500' : 'border-l-8 border-slate-400';
             
-            const currentId = document.getElementById('focus-id-marker')?.getAttribute('data-id');
-            if(currentId == focus.id) return; 
-
-            let borderColor = 'border-slate-400';
-            let tagColor = 'text-slate-600 bg-slate-100';
-            let cardBg = 'bg-white';
-            
-            const weight = WEIGHTS[focus.category] || 1;
-            if (weight === 5) { 
-                borderColor = 'border-rose-500';
-                tagColor = 'text-rose-600 bg-rose-50';
-            } else if (weight === 3) { 
-                borderColor = 'border-emerald-500';
-                tagColor = 'text-emerald-600 bg-emerald-50';
-            }
-
-            container.innerHTML = `
-                <div id="focusCard" class="${cardBg} border-l-[6px] ${borderColor} rounded-xl shadow-lg p-6 md:p-10 mb-10 relative overflow-hidden group scale-in transition-colors duration-500">
-                    <div id="focus-id-marker" data-id="${focus.id}"></div>
-                    
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
-                        <div class="w-full">
-                            <span class="text-xs font-bold ${tagColor} px-2 py-1 rounded mb-3 inline-block tracking-wide uppercase">${focus.category}</span>
-                            <h2 class="text-4xl md:text-6xl font-black text-slate-800 mb-2 leading-tight tracking-tight">${focus.name}</h2>
+            return `
+                <div id="activeCard" data-id="${task.id}" class="bg-white p-8 md:p-12 rounded-3xl shadow-2xl border border-slate-100 ${borderColor} relative overflow-hidden transition-all duration-500 scale-in">
+                    <div class="flex flex-col gap-6 relative z-10">
+                        <div>
+                            <div class="flex items-center gap-2 mb-4" id="statusIndicator">
+                                <span class="relative flex h-3 w-3">
+                                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                  <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                                </span>
+                                <span class="text-xs font-bold text-emerald-600 tracking-wider">LIVE FOCUS</span>
+                            </div>
+                            <h2 class="text-4xl md:text-6xl font-black leading-tight tracking-tight mb-2">${task.name}</h2>
                         </div>
                         
-                        <div class="flex flex-col items-end gap-4 w-full md:w-auto">
-                            <button id="btnComplete" onclick="completeFocusTask()" class="bg-slate-900 hover:bg-emerald-600 text-white text-sm font-bold px-8 py-5 rounded-lg shadow-xl hover:shadow-2xl transition-all active:scale-95 flex items-center gap-3 whitespace-nowrap w-full md:w-auto justify-center">
+                        <div class="flex justify-start">
+                            <button id="btnDone" onclick="completeTask()" class="bg-slate-900 hover:bg-emerald-600 text-white text-base font-bold px-10 py-5 rounded-2xl shadow-xl transition-transform active:scale-95 flex items-center gap-3">
                                 <span>MARK DONE</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                             </button>
                         </div>
                     </div>
-                    <div class="absolute bottom-0 left-0 h-3 bg-emerald-500 transition-all duration-1000 ease-linear" id="liveBar" style="width: 100%"></div>
+
+                    <div class="absolute bottom-0 left-0 h-4 bg-slate-100 w-full">
+                        <div id="progressBar" class="h-full bg-emerald-500 transition-all duration-1000 ease-linear" style="width: 100%"></div>
+                    </div>
                 </div>
             `;
         }
 
-        function renderList(sortedTasks) {
-            const listEl = document.getElementById('taskList');
-            listEl.innerHTML = '';
-            if (sortedTasks.length <= 1) return;
+        function completeTask() {
+            if(tasks.length === 0) return;
+            confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#10b981', '#34d399'] });
+            
+            const card = document.getElementById('activeCard');
+            // card.classList.add('slide-out-right'); 
 
-            for (let i = 1; i < sortedTasks.length; i++) {
-                const t = sortedTasks[i];
-                const div = document.createElement('div');
-                div.id = `task-${t.id}`;
-                div.className = "bg-white p-4 md:p-5 rounded-lg border border-slate-100 flex justify-between items-center text-slate-600 fade-in hover:border-slate-300 transition-colors group shadow-sm";
-                div.innerHTML = `
-                    <div class="flex items-center gap-4">
-                        <div class="h-8 w-8 min-w-[2rem] rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-400 border border-slate-200">${i+1}</div>
-                        <div class="flex flex-col">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">${t.category}</span>
-                            <span class="font-bold text-slate-800 text-lg leading-tight">${t.name}</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4 md:gap-6 pl-4">
-                        <button onclick="removeTask(${t.id})" class="text-slate-300 hover:text-rose-500 transition-colors p-2 rounded-full hover:bg-rose-50">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                        </button>
-                    </div>
-                `;
-                listEl.appendChild(div);
-            }
+            setTimeout(() => {
+                const done = tasks.shift();
+                done.finishedAt = new Date();
+                completedTasks.unshift(done);
+                renderAll();
+                renderCompleted();
+            }, 300);
         }
 
-        function renderCompletedList() {
-            const container = document.getElementById('completedArea');
+        function deleteTask(id) {
+            tasks = tasks.filter(t => t.id !== id);
+            renderAll();
+        }
+
+        function renderCompleted() {
+            const container = document.getElementById('completedContainer');
             const list = document.getElementById('completedList');
-            const count = document.getElementById('completedCount');
+            const count = document.getElementById('doneCount');
 
-            if (completedTasks.length === 0) {
-                container.classList.add('hidden');
-                return;
-            }
-
-            container.classList.remove('hidden');
+            if(completedTasks.length > 0) container.classList.remove('hidden');
             count.innerText = completedTasks.length;
-            list.innerHTML = '';
-
-            completedTasks.forEach(t => {
-                const div = document.createElement('div');
-                div.className = "bg-white p-4 rounded-lg border border-emerald-100 flex justify-between items-center slide-up shadow-sm";
-                div.innerHTML = `
-                    <div class="flex items-center gap-4">
-                        <div class="h-6 w-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        </div>
-                        <div class="flex flex-col">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">${t.category}</span>
-                            <span class="font-medium text-slate-500 line-through decoration-emerald-500/50">${t.name}</span>
-                        </div>
-                    </div>
-                    <div class="text-right text-xs text-slate-400">
-                        Finished at <span class="font-mono font-bold text-slate-500">${t.completedAt.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'})}</span>
-                    </div>
-                `;
-                list.appendChild(div);
-            });
+            
+            list.innerHTML = completedTasks.map(t => `
+                <div class="flex justify-between items-center bg-slate-50 p-4 rounded-xl slide-up">
+                    <span class="font-medium line-through decoration-emerald-500 decoration-2 text-slate-500">${t.name}</span>
+                    <span class="text-xs font-mono text-slate-400 bg-white px-2 py-1 rounded border border-slate-100">${t.finishedAt.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+                </div>
+            `).join('');
         }
     </script>
 </body>
