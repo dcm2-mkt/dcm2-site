@@ -8,6 +8,12 @@ import { Button } from "@/components/ui/button";
 // DATA: Your real tools
 const tools = [
   {
+    title: "Focus Time",
+    desc: "A daily productivity booster with a smart task wizard, to help you become distraction free.",
+    img: "/focus.png", // Make sure you added focus.png to your public folder
+    link: "/focus.html" // <--- UPDATED: This now points to the file in your public folder
+  },
+  {
     title: "GTM Simulator",
     desc: "Visualize cash flow between your fixed costs, paid acquisition, and viral growth to project your runway.",
     img: "/tool1.png", 
@@ -34,7 +40,7 @@ const tools = [
   {
     title: "Gantt Chart Builder",
     desc: "Create, visualize, and export project timelines with a fully interactive, mobile-responsive Gantt chart builder.",
-    img: "/gantt.webp", // Updated filename here
+    img: "/gantt.webp",
     link: "https://gantt-chart-builder-dcm2.netlify.app/"
   },
 ];
