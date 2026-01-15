@@ -9,8 +9,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Focus Time">
     
-    <link rel="apple-touch-icon" href="focusicon.png">
-    <link rel="icon" type="image/png" href="focusicon.png">
+    <link rel="apple-touch-icon" href="/focusicon.png?v=2">
+    <link rel="icon" type="image/png" href="/focusicon.png?v=2">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -281,8 +281,8 @@
             initAudio(); // Initialize audio context immediately on click
             Notification.requestPermission().then(permission => {
                 if (permission === "granted") {
-                    // Play a test beep to confirm
-                    triggerAlarm(); 
+                    // Pass specific text for the test sound
+                    triggerAlarm("Sound Enabled", "Notifications are working!"); 
                 }
             });
         }
@@ -299,7 +299,7 @@
             }
         }
 
-        function triggerAlarm() {
+        function triggerAlarm(title, body) {
             // Browser Beep
             if (audioCtx && audioCtx.state !== 'closed') {
                 if(audioCtx.state === 'suspended') audioCtx.resume();
@@ -322,10 +322,10 @@
                 osc.stop(now + 0.5);
             }
 
-            // Notification
+            // Notification (Uses passed title/body OR fallback to task info)
             if ("Notification" in window && Notification.permission === "granted") {
-                new Notification("Task Complete!", {
-                    body: `"${tasks[0].name}" is overdue!`,
+                new Notification(title || "Task Complete!", {
+                    body: body || "Your time is up!",
                     icon: "/focusicon.png",
                     requireInteraction: true 
                 });
@@ -475,7 +475,8 @@
                 }
 
                 if (!alarmHasPlayedForCurrent) {
-                    triggerAlarm();
+                    // Send explicit text for task overdue
+                    triggerAlarm("Task Complete!", `"${task.name}" is overdue!`);
                     alarmHasPlayedForCurrent = true;
                     setTimeout(() => alarmHasPlayedForCurrent = false, 30000); 
                 }
