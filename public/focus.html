@@ -9,8 +9,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Focus Time">
     
-    <link rel="apple-touch-icon" href="/focusicon.png?v=6">
-    <link rel="icon" type="image/png" href="/focusicon.png?v=6">
+    <link rel="apple-touch-icon" href="/focusicon.png?v=7">
+    <link rel="icon" type="image/png" href="/focusicon.png?v=7">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -41,7 +41,7 @@
         <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
                 <h1 class="text-3xl md:text-5xl font-black tracking-tighter text-slate-900">Focus Time</h1>
-                <p class="text-slate-500 font-medium">Daily Productivity Booster <span class="text-xs bg-rose-100 text-rose-700 px-2 py-0.5 rounded ml-2 font-bold">V6.0</span></p>
+                <p class="text-slate-500 font-medium">Daily Productivity Booster <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded ml-2 font-bold">V7.0</span></p>
             </div>
             
             <div class="flex items-center gap-3">
@@ -212,7 +212,7 @@
     <script>
         // --- CONFIGURATION ---
         const WEIGHTS = { "Urgent": 5, "Necessary": 3, "Maintenance": 1 };
-        const STORAGE_KEY = 'focus_tasks_v6'; // New Key for V6
+        const STORAGE_KEY = 'focus_tasks_v7'; // V7
         
         let tasks = [];
         let completedTasks = [];
@@ -221,7 +221,7 @@
         let alarmHasPlayedForCurrent = false;
         let deferredPrompt; 
 
-        // --- PERSISTENCE & DAILY RESET ---
+        // --- PERSISTENCE & RESET ---
         function loadData() {
             const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
@@ -230,25 +230,14 @@
                     tasks = Array.isArray(data.tasks) ? data.tasks : [];
                     completedTasks = Array.isArray(data.completedTasks) ? data.completedTasks : [];
                     
-                    // REHYDRATE DATES
-                    tasks.forEach(t => {
-                        if (t.startedAt) t.startedAt = new Date(t.startedAt);
-                    });
-                    completedTasks.forEach(t => {
-                         if (t.finishedAt) t.finishedAt = new Date(t.finishedAt);
-                    });
+                    tasks.forEach(t => { if (t.startedAt) t.startedAt = new Date(t.startedAt); });
+                    completedTasks.forEach(t => { if (t.finishedAt) t.finishedAt = new Date(t.finishedAt); });
 
-                    // --- NEW: SMART DAILY RESET ---
-                    // Filter out completed tasks that are NOT from today
+                    // Daily Reset logic
                     const todayStr = new Date().toDateString();
                     const initialCount = completedTasks.length;
-                    
                     completedTasks = completedTasks.filter(t => t.finishedAt.toDateString() === todayStr);
-                    
-                    // If we cleaned up old tasks, save the state immediately
-                    if (completedTasks.length !== initialCount) {
-                        saveData();
-                    }
+                    if (completedTasks.length !== initialCount) saveData();
 
                     renderAll();
                     renderCompleted();
@@ -262,7 +251,7 @@
 
         loadData();
 
-        // --- CALENDAR LOGIC (ICS GENERATOR) ---
+        // --- CALENDAR LOGIC (V7 FIX: iOS Browser vs Download) ---
         function exportToCalendar() {
             if (tasks.length === 0) return;
 
@@ -278,7 +267,7 @@
                 "CALSCALE:GREGORIAN"
             ];
 
-            tasks.forEach((task, index) => {
+            tasks.forEach((task) => {
                 let durationMs = task.duration * 3600000;
                 let startTime = new Date(currentTime);
                 let endTime = new Date(startTime.getTime() + durationMs);
@@ -300,12 +289,20 @@
             const blob = new Blob([icsContent.join("\n")], { type: 'text/calendar' });
             const url = URL.createObjectURL(blob);
             
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'focus_schedule.ics';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+            if (isIOS) {
+                // FORCE NAVIGATION TO FILE (Triggers iOS "Add to Calendar" preview)
+                window.location.href = url;
+            } else {
+                // DESKTOP/ANDROID (Triggers File Download)
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'focus_schedule.ics';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
         }
 
         // --- PWA LOGIC ---
@@ -403,7 +400,7 @@
                 navigator.vibrate([500, 200, 500, 200, 1000]); 
                 new Notification(title || "Task Complete!", {
                     body: body || "Your time is up!",
-                    icon: "/focusicon.png?v=6",
+                    icon: "/focusicon.png?v=7",
                     requireInteraction: true, 
                     vibrate: [500, 200, 500] 
                 });
