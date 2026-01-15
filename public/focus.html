@@ -9,8 +9,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Focus Time">
     
-    <link rel="apple-touch-icon" href="/focusicon.png?v=2">
-    <link rel="icon" type="image/png" href="/focusicon.png?v=2">
+    <link rel="apple-touch-icon" href="/focusicon.png?v=4">
+    <link rel="icon" type="image/png" href="/focusicon.png?v=4">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -18,13 +18,11 @@
     <style>
         body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         .scale-in { animation: scaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        .slide-out-right { animation: slideOutRight 0.4s ease-in forwards; }
         .slide-up { animation: slideUp 0.4s ease-out forwards; }
         .slide-in-right { animation: slideInRight 0.4s ease-out forwards; }
         
         @keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         @keyframes slideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes slideOutRight { to { opacity: 0; transform: translateX(100%); max-height: 0; margin: 0; padding: 0; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Urgent Pulse Animation */
@@ -43,7 +41,7 @@
         <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
                 <h1 class="text-3xl md:text-5xl font-black tracking-tighter text-slate-900">Focus Time</h1>
-                <p class="text-slate-500 font-medium">Daily Productivity Booster</p>
+                <p class="text-slate-500 font-medium">Daily Productivity Booster <span class="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded ml-2 font-bold">V4.0</span></p>
             </div>
             
             <div class="flex items-center gap-3">
@@ -208,6 +206,9 @@
     <script>
         // --- CONFIGURATION ---
         const WEIGHTS = { "Urgent": 5, "Necessary": 3, "Maintenance": 1 };
+        // V4: Clean Slate for proper array storage
+        const STORAGE_KEY = 'focus_tasks_v4'; 
+        
         let tasks = [];
         let completedTasks = [];
         let wakeLock = null;
@@ -215,29 +216,65 @@
         let alarmHasPlayedForCurrent = false;
         let deferredPrompt; 
 
+        // --- PERSISTENCE: LOAD/SAVE ---
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    // Force arrays if data is malformed
+                    tasks = Array.isArray(data.tasks) ? data.tasks : [];
+                    completedTasks = Array.isArray(data.completedTasks) ? data.completedTasks : [];
+                    
+                    // REHYDRATE DATES (Crucial!)
+                    tasks.forEach(t => {
+                        if (t.startedAt) t.startedAt = new Date(t.startedAt);
+                    });
+                    completedTasks.forEach(t => {
+                         if (t.finishedAt) t.finishedAt = new Date(t.finishedAt);
+                    });
+                    
+                    renderAll();
+                    renderCompleted();
+                } catch (e) {
+                    console.error("Save data corrupt", e);
+                    // If corrupt, reset to prevent app crash
+                    tasks = [];
+                    completedTasks = [];
+                }
+            }
+        }
+        
+        function saveData() {
+            const data = {
+                tasks: tasks,
+                completedTasks: completedTasks
+            };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        // Initialize Data
+        loadData();
+
         // --- PWA LOGIC ---
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
 
-        // Show Button if not installed
         if (!isStandalone) {
             const btnContainer = document.getElementById('installBtnContainer');
             const btn = document.getElementById('pwaInstallBtn');
             
-            // If iOS, show button but make it open help overlay
             if (isIOS) {
                 btnContainer.classList.remove('hidden');
                 btn.onclick = () => {
                     document.getElementById('iosInstallOverlay').classList.remove('hidden');
                 };
             } else {
-                // If Android/Desktop, wait for install prompt event
                 window.addEventListener('beforeinstallprompt', (e) => {
                     e.preventDefault();
                     deferredPrompt = e;
                     btnContainer.classList.remove('hidden');
                 });
-
                 btn.addEventListener('click', async () => {
                     if (deferredPrompt) {
                         deferredPrompt.prompt();
@@ -251,14 +288,21 @@
             }
         }
 
-        // --- CORE SYSTEM ---
+        // --- CORE SYSTEM LOOP ---
         setInterval(() => {
             if (tasks.length > 0) {
                 const activeTask = tasks[0];
+                
+                // If this is the top task and hasn't started, start it
                 if (!activeTask.startedAt) {
                     activeTask.startedAt = new Date(); 
+                    saveData(); // Save start time immediately
                     requestWakeLock();
                 }
+                
+                // Save state frequently to catch crashes
+                saveData(); 
+                
                 updateActiveCard(activeTask);
             }
         }, 1000);
@@ -278,10 +322,9 @@
         }
 
         function requestPermsManual() {
-            initAudio(); // Initialize audio context immediately on click
+            initAudio(); 
             Notification.requestPermission().then(permission => {
                 if (permission === "granted") {
-                    // Pass specific text for the test sound
                     triggerAlarm("Sound Enabled", "Notifications are working!"); 
                 }
             });
@@ -290,7 +333,6 @@
         function initAudio() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                // Silent buffer to unlock iOS audio
                 const buffer = audioCtx.createBuffer(1, 1, 22050); 
                 const source = audioCtx.createBufferSource();
                 source.buffer = buffer;
@@ -300,7 +342,6 @@
         }
 
         function triggerAlarm(title, body) {
-            // Browser Beep
             if (audioCtx && audioCtx.state !== 'closed') {
                 if(audioCtx.state === 'suspended') audioCtx.resume();
                 const osc = audioCtx.createOscillator();
@@ -322,21 +363,20 @@
                 osc.stop(now + 0.5);
             }
 
-            // Notification (Uses passed title/body OR fallback to task info)
             if ("Notification" in window && Notification.permission === "granted") {
+                navigator.vibrate([500, 200, 500, 200, 1000]); 
                 new Notification(title || "Task Complete!", {
                     body: body || "Your time is up!",
-                    icon: "/focusicon.png",
-                    requireInteraction: true 
+                    icon: "/focusicon.png?v=4",
+                    requireInteraction: true, 
+                    vibrate: [500, 200, 500] 
                 });
+            } else {
+                 if (navigator.vibrate) navigator.vibrate([500, 200, 500]);
             }
-            
-            // Vibrate
-            if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
         }
 
-        // --- INPUT HANDLERS (Mobile vs Desktop) ---
-        
+        // --- INPUT HANDLERS ---
         function submitDesktopTask() {
             const name = document.getElementById('dName').value;
             if(!name) return;
@@ -345,7 +385,6 @@
             
             addTask(name, duration, category);
             
-            // Reset Desktop Form
             document.getElementById('dName').value = '';
             document.getElementById('dName').focus();
         }
@@ -357,7 +396,6 @@
             
             addTask(name, duration, category);
 
-            // Reset Mobile Form & Wizard
             document.getElementById('mName').value = '';
             document.getElementById('mDuration').value = '1.0';
             document.getElementById('mCategory').value = 'Necessary';
@@ -365,28 +403,35 @@
         }
 
         function addTask(name, duration, category) {
-            // Init audio/perms on first add
             initAudio();
             if ("Notification" in window && Notification.permission === "default") {
                 Notification.requestPermission();
             }
 
+            // Standard push to the end of the list
             tasks.push({
                 id: Date.now(),
                 name,
                 duration,
                 category,
-                startedAt: null,
+                startedAt: null, // Will start when it reaches index 0
                 score: -WEIGHTS[category]
             });
+            
+            // NOTE: We do NOT re-sort everything every time. 
+            // We want the queue to respect the order the user added them,
+            // UNLESS we want to force 'Urgent' to jump the line. 
+            // For now, let's keep it simple: First In, First Out (queue), 
+            // but Active Task (index 0) is always locked.
+            
+            saveData();
             renderAll();
         }
 
-        // --- WIZARD UI (Mobile Only) ---
+        // --- WIZARD UI ---
         function nextStep(n) {
             if(n === 2) {
                 if(!document.getElementById('mName').value) return document.getElementById('mName').focus();
-                // Check perms on wizard flow
                 if ("Notification" in window && Notification.permission === "default") {
                     Notification.requestPermission();
                 }
@@ -417,21 +462,20 @@
 
             emptyState.classList.add('hidden');
 
-            // Sort (Keep Active [0] locked, sort rest)
-            if (tasks.length > 1) {
-                const active = tasks[0];
-                const others = tasks.slice(1);
-                others.sort((a, b) => a.score - b.score);
-                tasks = [active, ...others];
-            }
+            // --- QUEUE LOGIC ---
+            // Task [0] is always the active one.
+            // Tasks [1...] are the queue.
+            // We do NOT auto-sort here to preserve user order.
 
             focusContainer.classList.remove('hidden');
             const currentRenderedId = document.getElementById('activeCard')?.getAttribute('data-id');
+            // Only rebuild HTML if the active task CHANGED (to prevent flicker)
             if (currentRenderedId != tasks[0].id) {
                 focusContainer.innerHTML = buildActiveCardHTML(tasks[0]);
-                alarmHasPlayedForCurrent = false;
+                alarmHasPlayedForCurrent = false; // Reset alarm flag for new task
             }
 
+            // Render Queue
             if (tasks.length > 1) {
                 queueContainer.classList.remove('hidden');
                 document.getElementById('queueList').innerHTML = tasks.slice(1).map((t, i) => `
@@ -475,10 +519,10 @@
                 }
 
                 if (!alarmHasPlayedForCurrent) {
-                    // Send explicit text for task overdue
                     triggerAlarm("Task Complete!", `"${task.name}" is overdue!`);
                     alarmHasPlayedForCurrent = true;
-                    setTimeout(() => alarmHasPlayedForCurrent = false, 30000); 
+                    // Allow alarm retry after 60s
+                    setTimeout(() => alarmHasPlayedForCurrent = false, 60000); 
                 }
             } else {
                 bar.style.width = `${pct}%`;
@@ -529,6 +573,7 @@
                 const done = tasks.shift();
                 done.finishedAt = new Date();
                 completedTasks.unshift(done);
+                saveData(); // Save state
                 renderAll();
                 renderCompleted();
             }, 300);
@@ -536,6 +581,7 @@
 
         function deleteTask(id) {
             tasks = tasks.filter(t => t.id !== id);
+            saveData();
             renderAll();
         }
 
