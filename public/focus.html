@@ -9,8 +9,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Focus Time">
     
-    <link rel="apple-touch-icon" href="/focusicon.png?v=11">
-    <link rel="icon" type="image/png" href="/focusicon.png?v=11">
+    <link rel="apple-touch-icon" href="/focusicon.png?v=13">
+    <link rel="icon" type="image/png" href="/focusicon.png?v=13">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -41,7 +41,7 @@
         <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
                 <h1 class="text-3xl md:text-5xl font-black tracking-tighter text-slate-900">Focus Time</h1>
-                <p class="text-slate-500 font-medium">Daily Productivity Booster <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded ml-2 font-bold">V11.0</span></p>
+                <p class="text-slate-500 font-medium">Daily Productivity Booster</p>
             </div>
             
             <div class="flex items-center gap-3">
@@ -160,7 +160,7 @@
                 Sync to Calendar
             </button>
             <p class="text-[10px] text-slate-400 font-medium hidden md:block" id="calHelpText">
-                If asked to download: Tap 'Download' then open the file.
+                If menu appears: Scroll down to 'Add to Calendar'
             </p>
         </div>
 
@@ -215,7 +215,7 @@
     <script>
         // --- CONFIGURATION ---
         const WEIGHTS = { "Urgent": 5, "Necessary": 3, "Maintenance": 1 };
-        const STORAGE_KEY = 'focus_tasks_v11'; 
+        const STORAGE_KEY = 'focus_tasks_v13'; 
         
         let tasks = [];
         let completedTasks = [];
@@ -253,8 +253,8 @@
 
         loadData();
 
-        // --- CALENDAR LOGIC (V11: DATA URI) ---
-        function exportToCalendar() {
+        // --- CALENDAR LOGIC (V12: CRLF FIX) ---
+        async function exportToCalendar() {
             if (tasks.length === 0) return;
 
             let now = new Date();
@@ -262,6 +262,9 @@
                               ? tasks[0].startedAt 
                               : now;
 
+            // V12 FIX: Use explicit CRLF (\r\n) for line breaks. 
+            // This is critical for iOS recognition.
+            const CRLF = "\r\n";
             let icsContent = [
                 "BEGIN:VCALENDAR",
                 "VERSION:2.0",
@@ -294,34 +297,33 @@
             });
 
             icsContent.push("END:VCALENDAR");
-            
-            // --- V11: DATA URI STRATEGY ---
-            // This bypasses 'blob' and 'share sheet' issues by forcing a text/calendar data nav.
-            // On Mobile Safari/Chrome this often triggers "Subscribe" or "Add" logic better.
-            const icsData = icsContent.join("\n");
-            const dataUri = "data:text/calendar;charset=utf-8," + encodeURIComponent(icsData);
-            
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
-            if (isIOS) {
-                // Force window location to Data URI
-                window.location.href = dataUri;
-                
-                // Show help text in case it downloads
-                const hint = document.getElementById('calHelpText');
-                if(hint) {
-                    hint.classList.remove('hidden');
-                    hint.innerText = "If downloaded: Tap the file in your browser downloads to add.";
+            // Join with CRLF
+            const fileBody = icsContent.join(CRLF);
+            const file = new File([fileBody], 'invite.ics', { type: 'text/calendar;charset=utf-8' });
+            
+            // Modern Share Sheet (iOS Chrome/Safari)
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Focus Schedule',
+                        text: 'Add these tasks to your calendar'
+                    });
+                    return; 
+                } catch (err) {
+                    console.log('Share failed (user cancelled or unsupported)', err);
                 }
-            } else {
-                // Desktop
-                const link = document.createElement('a');
-                link.href = dataUri;
-                link.download = 'focus_schedule.ics';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
             }
+
+            // Fallback (Desktop/Android)
+            const url = URL.createObjectURL(file);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'invite.ics';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         // --- PWA LOGIC ---
@@ -335,7 +337,6 @@
             
             if (isIOS) {
                 btnContainer.classList.remove('hidden');
-                // Show hint if mobile
                 if(hint) hint.classList.remove('hidden'); 
                 btn.onclick = () => document.getElementById('iosInstallOverlay').classList.remove('hidden');
             } else {
@@ -428,7 +429,7 @@
                 navigator.vibrate([500, 200, 500, 200, 1000]); 
                 new Notification(title || "Task Complete!", {
                     body: body || "Your time is up!",
-                    icon: "/focusicon.png?v=11",
+                    icon: "/focusicon.png?v=12",
                     requireInteraction: true, 
                     vibrate: [500, 200, 500] 
                 });
