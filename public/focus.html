@@ -9,8 +9,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Focus Time">
     
-    <link rel="apple-touch-icon" href="/focusicon.png?v=13">
-    <link rel="icon" type="image/png" href="/focusicon.png?v=13">
+    <link rel="apple-touch-icon" href="/focusicon.png?v=14">
+    <link rel="icon" type="image/png" href="/focusicon.png?v=14">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -160,7 +160,8 @@
                 Sync to Calendar
             </button>
             <p class="text-[10px] text-slate-400 font-medium hidden md:block" id="calHelpText">
-                If menu appears: Scroll down to 'Add to Calendar'
+                <span class="block">Safari: Opens automatically.</span>
+                <span class="block text-indigo-500">Chrome: Tap 'Download' then 'Open in...'</span>
             </p>
         </div>
 
@@ -215,7 +216,7 @@
     <script>
         // --- CONFIGURATION ---
         const WEIGHTS = { "Urgent": 5, "Necessary": 3, "Maintenance": 1 };
-        const STORAGE_KEY = 'focus_tasks_v13'; 
+        const STORAGE_KEY = 'focus_tasks_v14'; 
         
         let tasks = [];
         let completedTasks = [];
@@ -253,7 +254,7 @@
 
         loadData();
 
-        // --- CALENDAR LOGIC (V12: CRLF FIX) ---
+        // --- CALENDAR LOGIC (V14: NO SHARE SHEET - DIRECT OPEN) ---
         async function exportToCalendar() {
             if (tasks.length === 0) return;
 
@@ -262,8 +263,6 @@
                               ? tasks[0].startedAt 
                               : now;
 
-            // V12 FIX: Use explicit CRLF (\r\n) for line breaks. 
-            // This is critical for iOS recognition.
             const CRLF = "\r\n";
             let icsContent = [
                 "BEGIN:VCALENDAR",
@@ -298,32 +297,30 @@
 
             icsContent.push("END:VCALENDAR");
 
-            // Join with CRLF
             const fileBody = icsContent.join(CRLF);
             const file = new File([fileBody], 'invite.ics', { type: 'text/calendar;charset=utf-8' });
             
-            // Modern Share Sheet (iOS Chrome/Safari)
-            if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                try {
-                    await navigator.share({
-                        files: [file],
-                        title: 'Focus Schedule',
-                        text: 'Add these tasks to your calendar'
-                    });
-                    return; 
-                } catch (err) {
-                    console.log('Share failed (user cancelled or unsupported)', err);
-                }
-            }
-
-            // Fallback (Desktop/Android)
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
             const url = URL.createObjectURL(file);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'invite.ics';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+
+            if (isIOS) {
+                // V14 FIX: BYPASS SHARE SHEET. Force Direct Open.
+                // Safari: Opens Preview. 
+                // Chrome: Forces Download -> User taps Open -> Opens Preview.
+                window.location.assign(url);
+                
+                // Show hint text for Chrome users
+                const hint = document.getElementById('calHelpText');
+                if(hint) hint.classList.remove('hidden');
+            } else {
+                // Desktop/Android
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'focus_schedule.ics';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
         }
 
         // --- PWA LOGIC ---
@@ -429,7 +426,7 @@
                 navigator.vibrate([500, 200, 500, 200, 1000]); 
                 new Notification(title || "Task Complete!", {
                     body: body || "Your time is up!",
-                    icon: "/focusicon.png?v=12",
+                    icon: "/focusicon.png?v=14",
                     requireInteraction: true, 
                     vibrate: [500, 200, 500] 
                 });
