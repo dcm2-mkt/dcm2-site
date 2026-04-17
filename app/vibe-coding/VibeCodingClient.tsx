@@ -8,10 +8,10 @@ import { Button } from "@/components/ui/button";
 // --- MAKE SURE THIS LIST IS HERE ---
 const tools = [
   {
-    title: "Focus Time",
-    desc: "A daily productivity booster with a smart task wizard, to help you become distraction free.",
-    img: "/focus.png", 
-    link: "/focus.html"
+    title: "Store Mapper",
+    desc: "Visualize, filter, and interact with our physical locations using this responsive mapping widget.",
+    img: "/storemapper.png", 
+    link: "https://storemapper.netlify.app"
   },
   {
     title: "GTM Simulator",
